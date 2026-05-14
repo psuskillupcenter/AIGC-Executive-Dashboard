@@ -1,0 +1,647 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>AIGC Executive Dashboard</title>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Thai:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #f4f8ff;
+      --card: rgba(255,255,255,0.92);
+      --text: #0f172a;
+      --muted: #64748b;
+      --line: #dbeafe;
+      --primary: #1d4ed8;
+      --primary2: #06b6d4;
+      --deep: #0b1b44;
+      --success: #059669;
+      --warning: #d97706;
+      --danger: #dc2626;
+      --shadow: 0 18px 45px rgba(15, 23, 42, 0.10);
+      --radius: 24px;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      font-family: "Noto Sans Thai", system-ui, sans-serif;
+      color: var(--text);
+      background:
+        radial-gradient(circle at top left, rgba(6,182,212,.18), transparent 34%),
+        radial-gradient(circle at top right, rgba(29,78,216,.18), transparent 34%),
+        linear-gradient(180deg, #eff6ff 0%, #f8fafc 55%, #ffffff 100%);
+      min-height: 100vh;
+    }
+
+    .container {
+      width: min(1180px, calc(100% - 32px));
+      margin: 0 auto;
+    }
+
+    .hero {
+      position: relative;
+      overflow: hidden;
+      padding: 54px 0 34px;
+      color: white;
+      background:
+        linear-gradient(135deg, rgba(11,27,68,.98), rgba(29,78,216,.96) 56%, rgba(6,182,212,.92));
+      border-bottom-left-radius: 42px;
+      border-bottom-right-radius: 42px;
+      box-shadow: var(--shadow);
+    }
+
+    .hero::after {
+      content: "";
+      position: absolute;
+      width: 420px;
+      height: 420px;
+      right: -130px;
+      top: -160px;
+      border-radius: 50%;
+      background: rgba(255,255,255,.14);
+    }
+
+    .hero-grid {
+      position: relative;
+      z-index: 1;
+      display: grid;
+      grid-template-columns: 1.3fr .7fr;
+      gap: 28px;
+      align-items: center;
+    }
+
+    .eyebrow {
+      display: inline-flex;
+      gap: 8px;
+      align-items: center;
+      padding: 8px 14px;
+      border: 1px solid rgba(255,255,255,.28);
+      background: rgba(255,255,255,.12);
+      border-radius: 999px;
+      font-size: 14px;
+      margin-bottom: 16px;
+    }
+
+    h1 {
+      margin: 0;
+      font-size: clamp(32px, 5vw, 58px);
+      line-height: 1.05;
+      letter-spacing: -1.2px;
+    }
+
+    .subtitle {
+      margin: 18px 0 0;
+      font-size: clamp(16px, 2vw, 21px);
+      color: rgba(255,255,255,.86);
+      max-width: 760px;
+      line-height: 1.7;
+    }
+
+    .hero-card {
+      padding: 24px;
+      border: 1px solid rgba(255,255,255,.22);
+      background: rgba(255,255,255,.12);
+      backdrop-filter: blur(12px);
+      border-radius: var(--radius);
+    }
+
+    .hero-card .label { color: rgba(255,255,255,.72); font-size: 14px; }
+    .hero-card .big { font-size: 44px; font-weight: 800; margin-top: 4px; }
+    .hero-card .small { color: rgba(255,255,255,.78); line-height: 1.6; margin-top: 8px; }
+
+    .section {
+      padding: 28px 0;
+    }
+
+    .section-title {
+      display: flex;
+      justify-content: space-between;
+      gap: 18px;
+      align-items: end;
+      margin-bottom: 16px;
+    }
+
+    .section-title h2 {
+      font-size: 26px;
+      margin: 0;
+      letter-spacing: -.3px;
+    }
+
+    .section-title p {
+      margin: 6px 0 0;
+      color: var(--muted);
+      line-height: 1.7;
+    }
+
+    .updated {
+      font-size: 13px;
+      color: var(--muted);
+      white-space: nowrap;
+    }
+
+    .grid {
+      display: grid;
+      gap: 18px;
+    }
+
+    .kpi-grid {
+      grid-template-columns: repeat(4, 1fr);
+      margin-top: -34px;
+      position: relative;
+      z-index: 3;
+    }
+
+    .card {
+      background: var(--card);
+      border: 1px solid rgba(219,234,254,.8);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      padding: 22px;
+    }
+
+    .kpi-card {
+      min-height: 150px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+
+    .kpi-name {
+      color: var(--muted);
+      font-size: 14px;
+      font-weight: 600;
+    }
+
+    .kpi-value {
+      font-size: 34px;
+      line-height: 1;
+      font-weight: 800;
+      color: var(--deep);
+      margin-top: 12px;
+    }
+
+    .kpi-unit {
+      color: var(--primary);
+      font-weight: 700;
+      margin-left: 4px;
+      font-size: 16px;
+    }
+
+    .kpi-desc {
+      margin-top: 14px;
+      color: var(--muted);
+      font-size: 13px;
+      line-height: 1.55;
+    }
+
+    .two-col { grid-template-columns: 1fr 1fr; }
+    .three-col { grid-template-columns: 1.05fr .95fr .9fr; }
+
+    .chart-box {
+      height: 350px;
+      position: relative;
+    }
+
+    .chart-box.small { height: 300px; }
+
+    .insight-grid {
+      grid-template-columns: repeat(3, 1fr);
+    }
+
+    .insight-card {
+      border-left: 5px solid var(--primary);
+      min-height: 190px;
+    }
+
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      border-radius: 999px;
+      background: #eff6ff;
+      color: #1d4ed8;
+      font-weight: 700;
+      font-size: 12px;
+      padding: 6px 10px;
+      margin-bottom: 12px;
+    }
+
+    .insight-card h3 {
+      margin: 0 0 10px;
+      font-size: 18px;
+      line-height: 1.35;
+    }
+
+    .insight-card p {
+      color: var(--muted);
+      line-height: 1.75;
+      margin: 0;
+      font-size: 14px;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      overflow: hidden;
+      font-size: 14px;
+    }
+
+    th, td {
+      padding: 14px 12px;
+      text-align: left;
+      border-bottom: 1px solid #e2e8f0;
+      vertical-align: top;
+    }
+
+    th {
+      color: #334155;
+      font-size: 13px;
+      background: #f8fafc;
+    }
+
+    td { color: #334155; line-height: 1.55; }
+
+    .priority {
+      font-weight: 800;
+      color: var(--primary);
+    }
+
+    .footer {
+      padding: 36px 0 48px;
+      color: var(--muted);
+      text-align: center;
+      font-size: 13px;
+    }
+
+    .loading {
+      padding: 18px;
+      border-radius: 18px;
+      background: rgba(255,255,255,.8);
+      color: var(--muted);
+      margin-top: 16px;
+    }
+
+    .error {
+      background: #fef2f2;
+      border: 1px solid #fecaca;
+      color: #991b1b;
+      padding: 16px;
+      border-radius: 18px;
+      margin-top: 18px;
+      line-height: 1.6;
+    }
+
+    @media (max-width: 980px) {
+      .hero-grid, .two-col, .three-col, .insight-grid { grid-template-columns: 1fr; }
+      .kpi-grid { grid-template-columns: repeat(2, 1fr); }
+      .section-title { align-items: start; flex-direction: column; }
+      .updated { white-space: normal; }
+    }
+
+    @media (max-width: 580px) {
+      .container { width: min(100% - 22px, 1180px); }
+      .hero { padding-top: 38px; border-bottom-left-radius: 28px; border-bottom-right-radius: 28px; }
+      .kpi-grid { grid-template-columns: 1fr; }
+      .card { padding: 18px; }
+      .chart-box { height: 290px; }
+      th, td { padding: 11px 9px; font-size: 12px; }
+    }
+  </style>
+</head>
+<body>
+  <header class="hero">
+    <div class="container hero-grid">
+      <div>
+        <div class="eyebrow">AIGC Learning Analytics · Executive Dashboard</div>
+        <h1>From Digital Learning<br>to AI-Driven Smart Office</h1>
+        <p class="subtitle">แดชบอร์ดสรุปผลการเรียนรู้ด้าน AI, Digital Literacy และ Global Citizenship เพื่อสนับสนุนการตัดสินใจเชิงบริหารและการวางแผนพัฒนาทักษะระยะต่อไป</p>
+      </div>
+      <div class="hero-card">
+        <div class="label">Overall Learning Gain</div>
+        <div class="big" id="heroGain">-</div>
+        <div class="small">ค่าเฉลี่ยการพัฒนาทักษะก่อน–หลังเรียน จากข้อมูลสรุปใน Google Sheet</div>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <section class="section">
+      <div class="container">
+        <div id="status" class="loading">กำลังโหลดข้อมูลจาก Google Sheet...</div>
+        <div class="grid kpi-grid" id="kpiGrid"></div>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="container">
+        <div class="section-title">
+          <div>
+            <h2>Participation & Course Analytics</h2>
+            <p>ภาพรวมการเข้าร่วมเรียนรู้ แยกตามกลุ่มผู้เรียนและคอร์สที่ได้รับความสนใจสูงสุด</p>
+          </div>
+          <div class="updated" id="updatedAt"></div>
+        </div>
+        <div class="grid two-col">
+          <div class="card">
+            <h3>ผู้เรียนตามกลุ่มเป้าหมาย</h3>
+            <div class="chart-box small"><canvas id="groupChart"></canvas></div>
+          </div>
+          <div class="card">
+            <h3>Top Courses</h3>
+            <div class="chart-box small"><canvas id="courseChart"></canvas></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="container">
+        <div class="section-title">
+          <div>
+            <h2>Learning Impact</h2>
+            <p>เปรียบเทียบระดับทักษะก่อน–หลังเรียน และวิเคราะห์ Learning Gain ในแต่ละกลุ่ม</p>
+          </div>
+        </div>
+        <div class="grid two-col">
+          <div class="card">
+            <h3>Before vs After by Group</h3>
+            <div class="chart-box"><canvas id="beforeAfterChart"></canvas></div>
+          </div>
+          <div class="card">
+            <h3>Skill Gap & Future Needs</h3>
+            <div class="chart-box"><canvas id="skillGapChart"></canvas></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="container">
+        <div class="section-title">
+          <div>
+            <h2>Executive Insights</h2>
+            <p>ข้อค้นพบเชิงบริหารที่สกัดจากผลการเรียนรู้ การนำไปใช้ และความต้องการพัฒนาต่อ</p>
+          </div>
+        </div>
+        <div class="grid insight-grid" id="insightGrid"></div>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="container">
+        <div class="section-title">
+          <div>
+            <h2>Unit-Level Strategic View</h2>
+            <p>สรุปรายหน่วยงานว่าเรียนรู้อะไร นำไปใช้อย่างไร และควรต่อยอดทักษะใด</p>
+          </div>
+        </div>
+        <div class="card" style="overflow:auto;">
+          <table>
+            <thead>
+              <tr>
+                <th>หน่วยงาน</th>
+                <th>จำนวน</th>
+                <th>คอร์สเด่น</th>
+                <th>การนำไปใช้</th>
+                <th>Insight สำหรับผู้บริหาร</th>
+              </tr>
+            </thead>
+            <tbody id="unitTable"></tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <div class="container">AIGC Executive Dashboard · Powered by Google Sheets + GitHub Pages</div>
+  </footer>
+
+  <script>
+    const API_URL = "https://script.google.com/macros/s/AKfycbzD9lwskeNNsUHXCz3TNICFGXRjapgyM_wJ39ZISpYzv-y8hWFqllMNDaRG4A3lO0kB/exec";
+
+    const chartRefs = {};
+
+    function toNumber(value) {
+      if (typeof value === "number") return value;
+      if (value === null || value === undefined || value === "") return 0;
+      const cleaned = String(value).replace(/,/g, "").trim();
+      const n = Number(cleaned);
+      return Number.isFinite(n) ? n : 0;
+    }
+
+    function pick(row, keys, fallback = "") {
+      for (const key of keys) {
+        if (row && row[key] !== undefined && row[key] !== null && row[key] !== "") return row[key];
+      }
+      return fallback;
+    }
+
+    function formatNumber(value) {
+      const n = toNumber(value);
+      if (!Number.isFinite(n)) return value || "-";
+      return n % 1 === 0 ? n.toLocaleString("th-TH") : n.toFixed(2);
+    }
+
+    function getSheet(data, name) {
+      return data?.data?.[name] || [];
+    }
+
+    async function loadDashboard() {
+      try {
+        const response = await fetch(API_URL);
+        if (!response.ok) throw new Error("โหลดข้อมูลไม่สำเร็จ: " + response.status);
+        const json = await response.json();
+        if (!json.success) throw new Error(json.message || "API ส่งข้อมูลไม่สำเร็จ");
+
+        document.getElementById("status").style.display = "none";
+        document.getElementById("updatedAt").textContent = "อัปเดตล่าสุด: " + new Date(json.updated_at || Date.now()).toLocaleString("th-TH");
+
+        renderKpis(getSheet(json, "DASHBOARD_KPI"));
+        renderGroupChart(getSheet(json, "SUMMARY_BY_GROUP"));
+        renderCourseChart(getSheet(json, "SUMMARY_BY_COURSE"));
+        renderBeforeAfterChart(getSheet(json, "SUMMARY_BY_GROUP"));
+        renderSkillGapChart(getSheet(json, "SUMMARY_SKILL_GAP"));
+        renderInsights(getSheet(json, "EXECUTIVE_INSIGHTS"));
+        renderUnitTable(getSheet(json, "SUMMARY_BY_UNIT"));
+      } catch (error) {
+        document.getElementById("status").className = "error";
+        document.getElementById("status").innerHTML = `<strong>ไม่สามารถโหลดข้อมูลได้</strong><br>${error.message}<br>โปรดตรวจสอบว่า Apps Script Deploy เป็น Web App และตั้งค่า Who has access: Anyone แล้ว`;
+      }
+    }
+
+    function renderKpis(rows) {
+      const kpiGrid = document.getElementById("kpiGrid");
+      kpiGrid.innerHTML = "";
+
+      const preferred = ["Total Learners", "Total Records", "Total Courses", "Avg Learning Gain", "Avg Before Level", "Avg After Level", "Top Course", "Strategic Gap"];
+      const sorted = [...rows].sort((a, b) => {
+        const an = pick(a, ["metric_name", "Metric Name"]);
+        const bn = pick(b, ["metric_name", "Metric Name"]);
+        const ai = preferred.indexOf(an);
+        const bi = preferred.indexOf(bn);
+        return (ai === -1 ? 99 : ai) - (bi === -1 ? 99 : bi);
+      }).slice(0, 8);
+
+      const gainRow = rows.find(r => String(pick(r, ["metric_name", "Metric Name"])).toLowerCase().includes("gain"));
+      if (gainRow) document.getElementById("heroGain").textContent = "+" + formatNumber(pick(gainRow, ["metric_value", "Metric Value"])) + " ระดับ";
+
+      sorted.forEach(row => {
+        const name = pick(row, ["metric_name", "Metric Name"], "KPI");
+        const value = pick(row, ["metric_value", "Metric Value"], "-");
+        const unit = pick(row, ["metric_unit", "Metric Unit"], "");
+        const desc = pick(row, ["description", "Description"], "");
+
+        const card = document.createElement("div");
+        card.className = "card kpi-card";
+        card.innerHTML = `
+          <div>
+            <div class="kpi-name">${name}</div>
+            <div class="kpi-value">${formatNumber(value)} <span class="kpi-unit">${unit}</span></div>
+          </div>
+          <div class="kpi-desc">${desc}</div>
+        `;
+        kpiGrid.appendChild(card);
+      });
+    }
+
+    function makeChart(id, config) {
+      if (chartRefs[id]) chartRefs[id].destroy();
+      chartRefs[id] = new Chart(document.getElementById(id), config);
+    }
+
+    function renderGroupChart(rows) {
+      const labels = rows.map(r => pick(r, ["learner_group", "Learner Group"]));
+      const values = rows.map(r => toNumber(pick(r, ["learner_count", "Learner Count"])));
+
+      makeChart("groupChart", {
+        type: "doughnut",
+        data: { labels, datasets: [{ data: values }] },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins: { legend: { position: "bottom" } }
+        }
+      });
+    }
+
+    function renderCourseChart(rows) {
+      const topRows = [...rows]
+        .sort((a,b) => toNumber(pick(b, ["learner_count", "Learner Count"])) - toNumber(pick(a, ["learner_count", "Learner Count"])))
+        .slice(0, 8)
+        .reverse();
+
+      makeChart("courseChart", {
+        type: "bar",
+        data: {
+          labels: topRows.map(r => pick(r, ["course_title", "Course Title"]).slice(0, 34)),
+          datasets: [{ label: "จำนวนผู้เรียน", data: topRows.map(r => toNumber(pick(r, ["learner_count", "Learner Count"]))) }]
+        },
+        options: {
+          indexAxis: "y",
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins: { legend: { display: false } },
+          scales: { x: { beginAtZero: true } }
+        }
+      });
+    }
+
+    function renderBeforeAfterChart(rows) {
+      const labels = rows.map(r => pick(r, ["learner_group", "Learner Group"]));
+      const before = rows.map(r => toNumber(pick(r, ["avg_before", "Avg Before"])));
+      const after = rows.map(r => toNumber(pick(r, ["avg_after", "Avg After"])));
+
+      makeChart("beforeAfterChart", {
+        type: "bar",
+        data: {
+          labels,
+          datasets: [
+            { label: "ก่อนเรียน", data: before },
+            { label: "หลังเรียน", data: after }
+          ]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          scales: { y: { beginAtZero: true, suggestedMax: 5 } }
+        }
+      });
+    }
+
+    function renderSkillGapChart(rows) {
+      const sorted = [...rows]
+        .sort((a,b) => toNumber(pick(b, ["mention_count", "Mention Count"])) - toNumber(pick(a, ["mention_count", "Mention Count"])))
+        .slice(0, 7)
+        .reverse();
+
+      makeChart("skillGapChart", {
+        type: "bar",
+        data: {
+          labels: sorted.map(r => pick(r, ["gap_category", "Gap Category"]).slice(0, 34)),
+          datasets: [{ label: "จำนวนการกล่าวถึง", data: sorted.map(r => toNumber(pick(r, ["mention_count", "Mention Count"]))) }]
+        },
+        options: {
+          indexAxis: "y",
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins: { legend: { display: false } },
+          scales: { x: { beginAtZero: true } }
+        }
+      });
+    }
+
+    function renderInsights(rows) {
+      const grid = document.getElementById("insightGrid");
+      grid.innerHTML = "";
+      rows.slice(0, 6).forEach(row => {
+        const type = pick(row, ["insight_type", "Insight Type"], "Insight");
+        const title = pick(row, ["insight_title", "Insight Title"], "Executive Insight");
+        const text = pick(row, ["insight_text", "Insight Text"], "");
+        const priority = pick(row, ["priority", "Priority"], "High");
+
+        const card = document.createElement("div");
+        card.className = "card insight-card";
+        card.innerHTML = `
+          <div class="badge">${type} · ${priority}</div>
+          <h3>${title}</h3>
+          <p>${text}</p>
+        `;
+        grid.appendChild(card);
+      });
+    }
+
+    function renderUnitTable(rows) {
+      const tbody = document.getElementById("unitTable");
+      tbody.innerHTML = "";
+      const sorted = [...rows]
+        .sort((a,b) => toNumber(pick(b, ["learner_count", "Learner Count"])) - toNumber(pick(a, ["learner_count", "Learner Count"])))
+        .slice(0, 12);
+
+      sorted.forEach(row => {
+        const department = pick(row, ["department", "Department", "faculty_or_office", "Faculty Or Office"], "-");
+        const count = pick(row, ["learner_count", "Learner Count"], "-");
+        const courses = pick(row, ["top_courses", "Top Courses"], "-");
+        const app = pick(row, ["key_application", "Key Application"], "-");
+        const insight = pick(row, ["executive_insight", "Executive Insight"], "-");
+
+        const tr = document.createElement("tr");
+        tr.innerHTML = `
+          <td><strong>${department}</strong></td>
+          <td class="priority">${formatNumber(count)}</td>
+          <td>${courses}</td>
+          <td>${app}</td>
+          <td>${insight}</td>
+        `;
+        tbody.appendChild(tr);
+      });
+    }
+
+    loadDashboard();
+  </script>
+</body>
+</html>
