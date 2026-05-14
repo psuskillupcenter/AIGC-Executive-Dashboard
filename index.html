@@ -9,638 +9,216 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Thai:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
   <style>
-    :root {
-      --bg: #f4f8ff;
-      --card: rgba(255,255,255,0.92);
-      --text: #0f172a;
-      --muted: #64748b;
-      --line: #dbeafe;
-      --primary: #1d4ed8;
-      --primary2: #06b6d4;
-      --deep: #0b1b44;
-      --success: #059669;
-      --warning: #d97706;
-      --danger: #dc2626;
-      --shadow: 0 18px 45px rgba(15, 23, 42, 0.10);
-      --radius: 24px;
+    :root{
+      --blue:#2458ff;--blue2:#0b2b85;--cyan:#16c4ff;--navy:#06194d;--dark:#071634;--muted:#667085;--soft:#f4f8ff;--line:#e3ebff;--white:#fff;--shadow:0 22px 60px rgba(20,42,100,.14);--radius:26px
     }
-
-    * { box-sizing: border-box; }
-
-    body {
-      margin: 0;
-      font-family: "Noto Sans Thai", system-ui, sans-serif;
-      color: var(--text);
-      background:
-        radial-gradient(circle at top left, rgba(6,182,212,.18), transparent 34%),
-        radial-gradient(circle at top right, rgba(29,78,216,.18), transparent 34%),
-        linear-gradient(180deg, #eff6ff 0%, #f8fafc 55%, #ffffff 100%);
-      min-height: 100vh;
-    }
-
-    .container {
-      width: min(1180px, calc(100% - 32px));
-      margin: 0 auto;
-    }
-
-    .hero {
-      position: relative;
-      overflow: hidden;
-      padding: 54px 0 34px;
-      color: white;
-      background:
-        linear-gradient(135deg, rgba(11,27,68,.98), rgba(29,78,216,.96) 56%, rgba(6,182,212,.92));
-      border-bottom-left-radius: 42px;
-      border-bottom-right-radius: 42px;
-      box-shadow: var(--shadow);
-    }
-
-    .hero::after {
-      content: "";
-      position: absolute;
-      width: 420px;
-      height: 420px;
-      right: -130px;
-      top: -160px;
-      border-radius: 50%;
-      background: rgba(255,255,255,.14);
-    }
-
-    .hero-grid {
-      position: relative;
-      z-index: 1;
-      display: grid;
-      grid-template-columns: 1.3fr .7fr;
-      gap: 28px;
-      align-items: center;
-    }
-
-    .eyebrow {
-      display: inline-flex;
-      gap: 8px;
-      align-items: center;
-      padding: 8px 14px;
-      border: 1px solid rgba(255,255,255,.28);
-      background: rgba(255,255,255,.12);
-      border-radius: 999px;
-      font-size: 14px;
-      margin-bottom: 16px;
-    }
-
-    h1 {
-      margin: 0;
-      font-size: clamp(32px, 5vw, 58px);
-      line-height: 1.05;
-      letter-spacing: -1.2px;
-    }
-
-    .subtitle {
-      margin: 18px 0 0;
-      font-size: clamp(16px, 2vw, 21px);
-      color: rgba(255,255,255,.86);
-      max-width: 760px;
-      line-height: 1.7;
-    }
-
-    .hero-card {
-      padding: 24px;
-      border: 1px solid rgba(255,255,255,.22);
-      background: rgba(255,255,255,.12);
-      backdrop-filter: blur(12px);
-      border-radius: var(--radius);
-    }
-
-    .hero-card .label { color: rgba(255,255,255,.72); font-size: 14px; }
-    .hero-card .big { font-size: 44px; font-weight: 800; margin-top: 4px; }
-    .hero-card .small { color: rgba(255,255,255,.78); line-height: 1.6; margin-top: 8px; }
-
-    .section {
-      padding: 28px 0;
-    }
-
-    .section-title {
-      display: flex;
-      justify-content: space-between;
-      gap: 18px;
-      align-items: end;
-      margin-bottom: 16px;
-    }
-
-    .section-title h2 {
-      font-size: 26px;
-      margin: 0;
-      letter-spacing: -.3px;
-    }
-
-    .section-title p {
-      margin: 6px 0 0;
-      color: var(--muted);
-      line-height: 1.7;
-    }
-
-    .updated {
-      font-size: 13px;
-      color: var(--muted);
-      white-space: nowrap;
-    }
-
-    .grid {
-      display: grid;
-      gap: 18px;
-    }
-
-    .kpi-grid {
-      grid-template-columns: repeat(4, 1fr);
-      margin-top: -34px;
-      position: relative;
-      z-index: 3;
-    }
-
-    .card {
-      background: var(--card);
-      border: 1px solid rgba(219,234,254,.8);
-      border-radius: var(--radius);
-      box-shadow: var(--shadow);
-      padding: 22px;
-    }
-
-    .kpi-card {
-      min-height: 150px;
-      display: flex;
-      flex-direction: column;
-      justify-content: space-between;
-    }
-
-    .kpi-name {
-      color: var(--muted);
-      font-size: 14px;
-      font-weight: 600;
-    }
-
-    .kpi-value {
-      font-size: 34px;
-      line-height: 1;
-      font-weight: 800;
-      color: var(--deep);
-      margin-top: 12px;
-    }
-
-    .kpi-unit {
-      color: var(--primary);
-      font-weight: 700;
-      margin-left: 4px;
-      font-size: 16px;
-    }
-
-    .kpi-desc {
-      margin-top: 14px;
-      color: var(--muted);
-      font-size: 13px;
-      line-height: 1.55;
-    }
-
-    .two-col { grid-template-columns: 1fr 1fr; }
-    .three-col { grid-template-columns: 1.05fr .95fr .9fr; }
-
-    .chart-box {
-      height: 350px;
-      position: relative;
-    }
-
-    .chart-box.small { height: 300px; }
-
-    .insight-grid {
-      grid-template-columns: repeat(3, 1fr);
-    }
-
-    .insight-card {
-      border-left: 5px solid var(--primary);
-      min-height: 190px;
-    }
-
-    .badge {
-      display: inline-flex;
-      align-items: center;
-      border-radius: 999px;
-      background: #eff6ff;
-      color: #1d4ed8;
-      font-weight: 700;
-      font-size: 12px;
-      padding: 6px 10px;
-      margin-bottom: 12px;
-    }
-
-    .insight-card h3 {
-      margin: 0 0 10px;
-      font-size: 18px;
-      line-height: 1.35;
-    }
-
-    .insight-card p {
-      color: var(--muted);
-      line-height: 1.75;
-      margin: 0;
-      font-size: 14px;
-    }
-
-    table {
-      width: 100%;
-      border-collapse: collapse;
-      overflow: hidden;
-      font-size: 14px;
-    }
-
-    th, td {
-      padding: 14px 12px;
-      text-align: left;
-      border-bottom: 1px solid #e2e8f0;
-      vertical-align: top;
-    }
-
-    th {
-      color: #334155;
-      font-size: 13px;
-      background: #f8fafc;
-    }
-
-    td { color: #334155; line-height: 1.55; }
-
-    .priority {
-      font-weight: 800;
-      color: var(--primary);
-    }
-
-    .footer {
-      padding: 36px 0 48px;
-      color: var(--muted);
-      text-align: center;
-      font-size: 13px;
-    }
-
-    .loading {
-      padding: 18px;
-      border-radius: 18px;
-      background: rgba(255,255,255,.8);
-      color: var(--muted);
-      margin-top: 16px;
-    }
-
-    .error {
-      background: #fef2f2;
-      border: 1px solid #fecaca;
-      color: #991b1b;
-      padding: 16px;
-      border-radius: 18px;
-      margin-top: 18px;
-      line-height: 1.6;
-    }
-
-    @media (max-width: 980px) {
-      .hero-grid, .two-col, .three-col, .insight-grid { grid-template-columns: 1fr; }
-      .kpi-grid { grid-template-columns: repeat(2, 1fr); }
-      .section-title { align-items: start; flex-direction: column; }
-      .updated { white-space: normal; }
-    }
-
-    @media (max-width: 580px) {
-      .container { width: min(100% - 22px, 1180px); }
-      .hero { padding-top: 38px; border-bottom-left-radius: 28px; border-bottom-right-radius: 28px; }
-      .kpi-grid { grid-template-columns: 1fr; }
-      .card { padding: 18px; }
-      .chart-box { height: 290px; }
-      th, td { padding: 11px 9px; font-size: 12px; }
-    }
+    *{box-sizing:border-box} html{scroll-behavior:smooth} body{margin:0;font-family:"Noto Sans Thai",system-ui,sans-serif;color:var(--dark);background:#fff;line-height:1.65} a{text-decoration:none;color:inherit}.container{width:min(1180px,calc(100% - 32px));margin:auto}
+    .topbar{position:sticky;top:0;z-index:50;background:rgba(255,255,255,.92);backdrop-filter:blur(12px);border-bottom:1px solid var(--line)}.nav{height:74px;display:flex;align-items:center;justify-content:space-between;gap:20px}.brand{display:flex;align-items:center;gap:10px;font-weight:800;color:var(--navy);font-size:22px}.brand-mark{width:36px;height:36px;border-radius:12px;background:linear-gradient(135deg,var(--blue),var(--cyan));display:grid;place-items:center;color:white}.menu{display:flex;align-items:center;gap:8px;flex-wrap:wrap;justify-content:flex-end}.menu a{padding:9px 13px;border-radius:999px;font-size:14px;font-weight:700;color:#344054}.menu a:hover{background:#edf4ff;color:var(--blue)}.cta{background:var(--blue)!important;color:white!important;padding:10px 16px!important}
+    .hero{position:relative;overflow:hidden;color:white;background:linear-gradient(125deg,rgba(6,25,77,.98),rgba(36,88,255,.92) 58%,rgba(22,196,255,.88)),url('https://images.unsplash.com/photo-1551434678-e076c223a692?auto=format&fit=crop&w=1600&q=80') center/cover;min-height:680px}.hero::after{content:"";position:absolute;left:-6%;right:-6%;bottom:-86px;height:170px;background:white;border-radius:50% 50% 0 0}.hero-inner{position:relative;z-index:2;display:grid;grid-template-columns:1.08fr .92fr;gap:42px;align-items:center;padding:94px 0 130px}.eyebrow{display:inline-flex;gap:8px;align-items:center;border:1px solid rgba(255,255,255,.28);background:rgba(255,255,255,.13);border-radius:999px;padding:8px 15px;font-size:14px;margin-bottom:18px}.hero h1{font-size:clamp(42px,5.5vw,72px);line-height:1.02;margin:0;letter-spacing:-1.8px}.hero p{font-size:clamp(16px,2vw,21px);color:rgba(255,255,255,.88);margin:20px 0 28px}.hero-actions{display:flex;gap:12px;flex-wrap:wrap}.btn{display:inline-flex;align-items:center;gap:8px;padding:13px 18px;border-radius:999px;font-weight:800;border:1px solid rgba(255,255,255,.28)}.btn.primary{background:white;color:var(--blue)}.btn.ghost{color:white;background:rgba(255,255,255,.1)}.hero-card{background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.25);border-radius:32px;padding:24px;box-shadow:0 24px 70px rgba(0,0,0,.2);backdrop-filter:blur(12px)}.dashboard-mock{background:white;border-radius:24px;padding:18px;color:var(--dark);box-shadow:var(--shadow)}.mock-top{display:flex;justify-content:space-between;align-items:center;margin-bottom:14px}.mock-title{font-weight:800;color:var(--navy)}.mock-pill{font-size:12px;background:#ecf5ff;color:var(--blue);padding:6px 10px;border-radius:999px;font-weight:800}.mock-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:12px}.mock-kpi{padding:16px;border-radius:18px;background:linear-gradient(180deg,#f8fbff,#eef5ff);border:1px solid #e3ebff}.mock-kpi .n{font-size:28px;font-weight:800;color:var(--blue)}.mock-kpi .t{font-size:12px;color:var(--muted)}
+    .section{padding:78px 0}.section.light{background:linear-gradient(180deg,#fff,#f6f9ff)}.section.deep{background:var(--navy);color:white}.section-title{text-align:center;max-width:850px;margin:0 auto 34px}.section-title .small{color:var(--blue);font-weight:800;font-size:13px;letter-spacing:.12em;text-transform:uppercase}.section-title h2{font-size:clamp(30px,4vw,46px);line-height:1.16;margin:8px 0 10px;letter-spacing:-.8px}.section-title p{color:var(--muted);margin:0}.section.deep .section-title p{color:rgba(255,255,255,.72)}
+    .kpi-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;margin-top:-90px;position:relative;z-index:3}.kpi-card{background:white;border:1px solid var(--line);border-radius:24px;padding:22px;box-shadow:var(--shadow);min-height:150px}.kpi-name{font-weight:800;color:#52637a;font-size:14px}.kpi-value{font-size:34px;line-height:1.15;margin:12px 0 8px;font-weight:800;color:var(--navy)}.kpi-unit{font-size:15px;color:var(--blue);margin-left:4px}.kpi-desc{color:var(--muted);font-size:13px}
+    .grid{display:grid;gap:22px}.two{grid-template-columns:1fr 1fr}.three{grid-template-columns:repeat(3,1fr)}.card{background:white;border:1px solid var(--line);border-radius:var(--radius);box-shadow:var(--shadow);padding:24px}.card h3{margin:0 0 16px;font-size:22px}.chart-box{height:340px;position:relative}.mini-summary{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-top:14px}.mini-item{background:#f6f9ff;border:1px solid var(--line);border-radius:18px;padding:14px}.mini-item .n{font-size:26px;font-weight:800;color:var(--blue)}.mini-item .t{font-size:13px;color:var(--muted)}
+    table{width:100%;border-collapse:collapse;font-size:14px}th,td{text-align:left;border-bottom:1px solid #e8eefb;padding:14px 12px;vertical-align:top}th{background:#f6f9ff;color:#344054;font-size:13px}td{color:#344054}.priority{font-weight:800;color:var(--blue)}
+    .process{display:grid;grid-template-columns:repeat(3,1fr);gap:22px}.process-card{background:white;color:var(--dark);border-radius:28px;padding:24px;position:relative;overflow:hidden}.process-card::before{content:"";position:absolute;right:-40px;top:-40px;width:120px;height:120px;background:#edf5ff;border-radius:50%}.phase{font-size:13px;font-weight:800;color:var(--blue);position:relative}.process-card h3{font-size:25px;margin:8px 0}.process-card p,.process-card li{color:#52637a}.process-card ul{padding-left:18px;margin-bottom:0}
+    .accordion-list{display:grid;gap:16px}.accordion-item{background:white;border:1px solid var(--line);border-radius:24px;box-shadow:var(--shadow);overflow:hidden}.accordion-header{width:100%;border:0;background:white;padding:22px;display:flex;justify-content:space-between;gap:18px;text-align:left;cursor:pointer;font-family:inherit}.accordion-title{font-size:20px;font-weight:800}.accordion-meta{display:flex;gap:10px;flex-wrap:wrap;margin-top:8px}.meta-pill{background:#edf5ff;color:var(--blue);border-radius:999px;padding:7px 11px;font-size:13px;font-weight:800}.accordion-icon{font-size:28px;color:var(--blue);font-weight:800}.accordion-body{display:none;padding:0 22px 22px;border-top:1px solid var(--line)}.accordion-item.active .accordion-body{display:block}.accordion-item.active .accordion-icon{transform:rotate(45deg)}.detail-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:15px;margin-top:18px}.detail-card{background:#f8fbff;border:1px solid var(--line);border-radius:18px;padding:16px}.detail-card h4{margin:0 0 8px}.detail-card p{margin:0;color:#52637a}
+    .ticker{overflow:hidden;border-top:1px solid #e6edff;border-bottom:1px solid #e6edff;background:white}.ticker-track{display:flex;gap:26px;white-space:nowrap;padding:16px 0;font-weight:800;color:var(--blue);font-size:18px;animation:marquee 28s linear infinite}.ticker span::before{content:"✦";margin-right:20px;color:var(--cyan)}@keyframes marquee{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+    .insight-card{border-left:5px solid var(--blue)}.badge{display:inline-flex;background:#edf5ff;color:var(--blue);padding:6px 10px;border-radius:999px;font-weight:800;font-size:12px;margin-bottom:10px}.footer{background:#050f33;color:rgba(255,255,255,.7);padding:36px 0;text-align:center}
+    .loading,.error{padding:16px;border-radius:18px;margin-top:18px}.loading{background:white;color:var(--muted)}.error{background:#fff1f2;color:#9f1239;border:1px solid #fecdd3}
+    @media(max-width:980px){.hero-inner,.two,.three,.process,.detail-grid{grid-template-columns:1fr}.kpi-grid{grid-template-columns:repeat(2,1fr)}.topbar .nav{height:auto;flex-direction:column;padding:14px 0}.menu{justify-content:center}.hero{min-height:auto}.hero-inner{padding:54px 0 120px}.mini-summary{grid-template-columns:1fr}}
+    @media(max-width:580px){.container{width:min(100% - 22px,1180px)}.kpi-grid{grid-template-columns:1fr}.hero h1{font-size:38px}.section{padding:52px 0}.chart-box{height:310px}.card{padding:18px}th,td{font-size:12px;padding:10px}}
   </style>
 </head>
 <body>
-  <header class="hero">
-    <div class="container hero-grid">
+  <nav class="topbar">
+    <div class="container nav">
+      <a class="brand" href="#home"><span class="brand-mark">AI</span>AIGC Dashboard</a>
+      <div class="menu">
+        <a href="#courses">Courses</a><a href="#units">Units</a><a href="#skillgaps">Skill Gaps</a><a href="#roadmap">Roadmap</a><a href="#insights">Insights</a><a class="cta" href="#overview">View Dashboard</a>
+      </div>
+    </div>
+  </nav>
+
+  <header class="hero" id="home">
+    <div class="container hero-inner">
       <div>
-        <div class="eyebrow">AIGC Learning Analytics · Executive Dashboard</div>
-        <h1>From Digital Learning<br>to AI-Driven Smart Office</h1>
-        <p class="subtitle">แดชบอร์ดสรุปผลการเรียนรู้ด้าน AI, Digital Literacy และ Global Citizenship เพื่อสนับสนุนการตัดสินใจเชิงบริหารและการวางแผนพัฒนาทักษะระยะต่อไป</p>
+        <div class="eyebrow">Executive AIGC Learning Analytics</div>
+        <h1>Digital, AI & Global Citizenship Dashboard</h1>
+        <p>เว็บไซต์สรุปผลการเรียนรู้สำหรับผู้บริหาร เห็นทั้งภาพรวมคอร์สยอดนิยม คอร์สที่ยังไม่ถูกเลือก การนำไปใช้รายหน่วยงาน Skill Gaps และแผนยุทธศาสตร์ระยะยาว</p>
+        <div class="hero-actions"><a class="btn primary" href="#courses">Explore Courses</a><a class="btn ghost" href="#roadmap">Strategic Roadmap</a></div>
       </div>
       <div class="hero-card">
-        <div class="label">Overall Learning Gain</div>
-        <div class="big" id="heroGain">-</div>
-        <div class="small">ค่าเฉลี่ยการพัฒนาทักษะก่อน–หลังเรียน จากข้อมูลสรุปใน Google Sheet</div>
+        <div class="dashboard-mock">
+          <div class="mock-top"><div class="mock-title">Live Data Overview</div><div class="mock-pill">Google Sheet API</div></div>
+          <div class="mock-grid">
+            <div class="mock-kpi"><div class="n" id="mockTotalCourses">-</div><div class="t">Prepared Courses</div></div>
+            <div class="mock-kpi"><div class="n" id="mockSelectedCourses">-</div><div class="t">Selected Courses</div></div>
+            <div class="mock-kpi"><div class="n" id="mockTopCourseCount">-</div><div class="t">Top Course Learners</div></div>
+            <div class="mock-kpi"><div class="n" id="mockTopGap">-</div><div class="t">Top Skill Gap</div></div>
+          </div>
+        </div>
       </div>
     </div>
   </header>
 
   <main>
-    <section class="section">
+    <section class="section" id="overview">
       <div class="container">
         <div id="status" class="loading">กำลังโหลดข้อมูลจาก Google Sheet...</div>
         <div class="grid kpi-grid" id="kpiGrid"></div>
       </div>
     </section>
 
-    <section class="section">
+    <section class="section light" id="courses">
       <div class="container">
-        <div class="section-title">
-          <div>
-            <h2>Participation & Course Analytics</h2>
-            <p>ภาพรวมการเข้าร่วมเรียนรู้ แยกตามกลุ่มผู้เรียนและคอร์สที่ได้รับความสนใจสูงสุด</p>
-          </div>
-          <div class="updated" id="updatedAt"></div>
-        </div>
-        <div class="grid two-col">
-          <div class="card">
-            <h3>ผู้เรียนตามกลุ่มเป้าหมาย</h3>
-            <div class="chart-box small"><canvas id="groupChart"></canvas></div>
-          </div>
-          <div class="card">
-            <h3>Top Courses</h3>
-            <div class="chart-box small"><canvas id="courseChart"></canvas></div>
-          </div>
+        <div class="section-title"><div class="small">Course Analytics</div><h2>ภาพรวมคอร์สและความนิยม</h2><p>คอร์สที่เตรียมไว้ คอร์สที่ถูกเลือกเรียน คอร์สที่ยังไม่ถูกเลือก และคอร์สยอดนิยมสูงสุด</p><div class="updated" id="updatedAt"></div></div>
+        <div class="grid two">
+          <div class="card"><h3>สถานะการเลือกเรียนของคอร์ส</h3><div class="chart-box"><canvas id="courseStatusChart"></canvas></div><div class="mini-summary" id="courseStatusMini"></div></div>
+          <div class="card"><h3>Top Courses by Learner Count</h3><div class="chart-box"><canvas id="courseChart"></canvas></div></div>
         </div>
       </div>
     </section>
 
-    <section class="section">
+    <div class="ticker"><div class="ticker-track"><span>AI Literacy</span><span>Digital Literacy</span><span>Global Citizenship</span><span>Data Visualization</span><span>Automation</span><span>Smart Office</span><span>AI Literacy</span><span>Digital Literacy</span><span>Global Citizenship</span><span>Data Visualization</span><span>Automation</span><span>Smart Office</span></div></div>
+
+    <section class="section" id="course-added">
       <div class="container">
-        <div class="section-title">
-          <div>
-            <h2>Learning Impact</h2>
-            <p>เปรียบเทียบระดับทักษะก่อน–หลังเรียน และวิเคราะห์ Learning Gain ในแต่ละกลุ่ม</p>
-          </div>
-        </div>
-        <div class="grid two-col">
-          <div class="card">
-            <h3>Before vs After by Group</h3>
-            <div class="chart-box"><canvas id="beforeAfterChart"></canvas></div>
-          </div>
-          <div class="card">
-            <h3>Skill Gap & Future Needs</h3>
-            <div class="chart-box"><canvas id="skillGapChart"></canvas></div>
-          </div>
+        <div class="section-title"><div class="small">Learner-Driven Demand</div><h2>คอร์สที่ผู้เรียนหาเพิ่มและเสนอเพิ่มเติม</h2><p>สะท้อนความต้องการจากหน้างานจริง และช่วยบอกทิศทางหลักสูตรระยะต่อไป</p></div>
+        <div class="grid two">
+          <div class="card" style="overflow:auto"><h3>รายการหัวข้อที่ควรต่อยอด</h3><table><thead><tr><th>หัวข้อ/คอร์ส</th><th>จำนวน</th><th>Priority</th><th>ความหมายเชิงบริหาร</th></tr></thead><tbody id="learnerAddedTable"></tbody></table></div>
+          <div class="card"><h3>Management Interpretation</h3><p id="learnerAddedInsight">กำลังวิเคราะห์ข้อมูล...</p></div>
         </div>
       </div>
     </section>
 
-    <section class="section">
+    <section class="section light" id="units">
       <div class="container">
-        <div class="section-title">
-          <div>
-            <h2>Executive Insights</h2>
-            <p>ข้อค้นพบเชิงบริหารที่สกัดจากผลการเรียนรู้ การนำไปใช้ และความต้องการพัฒนาต่อ</p>
-          </div>
+        <div class="section-title"><div class="small">Unit-Level Insight</div><h2>วิเคราะห์รายหน่วยงาน</h2><p>คลิกเพื่อดูรายละเอียดว่าเลือกเรียนอะไร นำไปใช้อย่างไร เหมาะสมกับภารกิจหรือไม่ และควรเสริมอะไรต่อ</p></div>
+        <div id="unitAccordion" class="accordion-list"></div>
+      </div>
+    </section>
+
+    <section class="section" id="skillgaps">
+      <div class="container">
+        <div class="section-title"><div class="small">Skill Gap & Future Needs</div><h2>ช่องว่างด้านทักษะและความต้องการพัฒนาต่อ</h2><p>ใช้กำหนดหลักสูตร Digital, AI และ Global Citizenship ที่ตอบโจทย์อนาคต</p></div>
+        <div class="grid two">
+          <div class="card"><h3>Top Skill Gaps</h3><div class="chart-box"><canvas id="skillGapChart"></canvas></div></div>
+          <div class="card" style="overflow:auto"><h3>Strategic Gap Details</h3><table><thead><tr><th>หมวดทักษะ</th><th>จำนวน</th><th>Priority</th><th>แนวทางดำเนินการ</th></tr></thead><tbody id="skillGapTable"></tbody></table></div>
         </div>
+      </div>
+    </section>
+
+    <section class="section deep" id="roadmap">
+      <div class="container">
+        <div class="section-title"><div class="small">Long-Term Strategy</div><h2>แผนยุทธศาสตร์การพัฒนาทักษะระยะยาว</h2><p>Digital, AI และ Global Citizenship เพื่อขับเคลื่อนองค์กรสู่ Smart Office และ Smart Knowledge Hub</p></div>
+        <div id="roadmapGrid" class="process"></div>
+      </div>
+    </section>
+
+    <section class="section light" id="insights">
+      <div class="container">
+        <div class="section-title"><div class="small">Executive Insights</div><h2>ข้อค้นพบเชิงบริหาร</h2><p>ข้อสรุปที่ช่วยผู้บริหารตัดสินใจเรื่องทิศทางการพัฒนาคนและระบบงาน</p></div>
         <div class="grid insight-grid" id="insightGrid"></div>
-      </div>
-    </section>
-
-    <section class="section">
-      <div class="container">
-        <div class="section-title">
-          <div>
-            <h2>Unit-Level Strategic View</h2>
-            <p>สรุปรายหน่วยงานว่าเรียนรู้อะไร นำไปใช้อย่างไร และควรต่อยอดทักษะใด</p>
-          </div>
-        </div>
-        <div class="card" style="overflow:auto;">
-          <table>
-            <thead>
-              <tr>
-                <th>หน่วยงาน</th>
-                <th>จำนวน</th>
-                <th>คอร์สเด่น</th>
-                <th>การนำไปใช้</th>
-                <th>Insight สำหรับผู้บริหาร</th>
-              </tr>
-            </thead>
-            <tbody id="unitTable"></tbody>
-          </table>
-        </div>
       </div>
     </section>
   </main>
 
-  <footer class="footer">
-    <div class="container">AIGC Executive Dashboard · Powered by Google Sheets + GitHub Pages</div>
-  </footer>
+  <footer class="footer"><div class="container">AIGC Executive Dashboard · Google Sheets + GitHub Pages</div></footer>
 
   <script>
     const API_URL = "https://script.google.com/macros/s/AKfycbzD9lwskeNNsUHXCz3TNICFGXRjapgyM_wJ39ZISpYzv-y8hWFqllMNDaRG4A3lO0kB/exec";
 
+    const FALLBACK_SKILL_GAPS = [
+      {gap_category:"Advanced AI & Automation",mention_count:11,strategic_priority:"Very High",recommended_action:"จัด Workshop AI Agent / Workflow Automation",executive_note:"ผู้เรียนต้องการขยับจากผู้ใช้ AI ไปสู่ผู้สร้างระบบ"},
+      {gap_category:"Data Visualization & Analytics",mention_count:8,strategic_priority:"Very High",recommended_action:"จัด Dashboard Lab ด้วย Power BI",executive_note:"หน่วยงานต้องการใช้ข้อมูลเพื่อการตัดสินใจ"},
+      {gap_category:"Creative Content",mention_count:7,strategic_priority:"High",recommended_action:"จัด Canva / Infographic / Video Storytelling",executive_note:"ต้องการผลิตสื่อและสื่อสารข้อมูลให้เข้าใจง่าย"},
+      {gap_category:"Security & Governance",mention_count:5,strategic_priority:"High",recommended_action:"จัด PDPA / Cybersecurity / Data Governance",executive_note:"ลดความเสี่ยงด้านข้อมูลและกฎหมาย"},
+      {gap_category:"Language & Professional Skills",mention_count:5,strategic_priority:"Medium",recommended_action:"จัด English for Professional Services",executive_note:"หน่วยงานบริการนานาชาติต้องการภาษาอังกฤษเชิงวิชาชีพ"},
+      {gap_category:"Advanced Office Skills",mention_count:4,strategic_priority:"Medium",recommended_action:"จัด Advanced Excel / Macro / VBA",executive_note:"ต่อยอดงานเอกสารและข้อมูลให้มีประสิทธิภาพ"},
+      {gap_category:"Soft Skills & Digital Transformation",mention_count:3,strategic_priority:"Medium",recommended_action:"จัด Digital Leadership / Change Management",executive_note:"เสริมภาวะผู้นำและการเปลี่ยนผ่านเชิงองค์กร"}
+    ];
+
+    const FALLBACK_ROADMAP = [
+      {phase:"ระยะสั้น",period:"ปีที่ 1",focus_area:"ปรับฐานราก",description:"ปูพื้นฐาน Digital Literacy, AI Literacy และ Global Citizenship สำหรับคนส่วนใหญ่",target_group:"บุคลากรและนักศึกษา",priority_programs:"Word, Power BI, AI Basics, PDPA, Cybersecurity",kpi:"คะแนนหลังอบรมเฉลี่ยไม่ต่ำกว่า 4.0/5.0",expected_outcomes:"มีฐานทักษะพร้อมใช้งาน และลดช่องว่างทักษะพื้นฐาน"},
+      {phase:"ระยะกลาง",period:"ปีที่ 2",focus_area:"ประยุกต์ใช้",description:"พัฒนาการใช้ AI และ Data Tools เฉพาะทางตามภารกิจของแต่ละหน่วยงาน",target_group:"หน่วยงานสนับสนุนและหน่วยงานบริการหลัก",priority_programs:"Prompt Engineering, Dashboard Lab, Copilot for Office Work, AI for Service",kpi:"มีกรณีการนำไปใช้จริงและลดขั้นตอนงานประจำ",expected_outcomes:"เกิด Productivity และ Service Innovation ในหน่วยงาน"},
+      {phase:"ระยะยาว",period:"ปีที่ 3",focus_area:"นวัตกรรม",description:"สร้าง AI Agent, Automation และ Data-Driven Decision Support สำหรับผู้บริหาร",target_group:"หน่วยงานที่มีศักยภาพสูงและผู้บริหาร",priority_programs:"AI Agent Development, Workflow Automation, Advanced Analytics",kpi:"จำนวนนวัตกรรมดิจิทัลหรือระบบอัตโนมัติที่เกิดขึ้น",expected_outcomes:"ยกระดับสู่ Smart Office และ Smart Knowledge Hub"}
+    ];
+
     const chartRefs = {};
+    function toNumber(value){if(typeof value === "number")return value;if(value === null || value === undefined || value === "")return 0;const n = Number(String(value).replaceAll(",","").trim());return Number.isFinite(n)?n:0}
+    function pick(row,keys,fallback=""){for(const key of keys){if(row && row[key] !== undefined && row[key] !== null && row[key] !== "")return row[key]}return fallback}
+    function norm(text){return String(text || "").trim().toLowerCase().split(" ").join("_")}
+    function normalizeRows(rows){return (rows || []).map(row => {const out = {...row};Object.keys(row || {}).forEach(key => out[norm(key)] = row[key]);return out})}
+    function formatNumber(value){if(typeof value === "string" && value.trim() !== "" && isNaN(Number(value.replaceAll(",",""))))return value;const n = toNumber(value);return n % 1 === 0 ? n.toLocaleString("th-TH") : n.toFixed(2)}
+    function getSheet(json,name){return normalizeRows(json?.data?.[name] || [])}
+    function metricValue(kpis,names,fallback=0){const found = kpis.find(r => names.map(norm).includes(norm(pick(r,["metric_name","Metric Name"])))) || kpis.find(r => names.some(name => norm(pick(r,["metric_name","Metric Name"])).includes(norm(name))));return found ? pick(found,["metric_value","Metric Value"],fallback) : fallback}
+    function hasUsableSkillGaps(rows){return rows && rows.some(r => toNumber(pick(r,["mention_count","Mention Count","count","จำนวน"])) > 0)}
 
-    function toNumber(value) {
-      if (typeof value === "number") return value;
-      if (value === null || value === undefined || value === "") return 0;
-      const cleaned = String(value).replace(/,/g, "").trim();
-      const n = Number(cleaned);
-      return Number.isFinite(n) ? n : 0;
-    }
-
-    function pick(row, keys, fallback = "") {
-      for (const key of keys) {
-        if (row && row[key] !== undefined && row[key] !== null && row[key] !== "") return row[key];
-      }
-      return fallback;
-    }
-
-    function formatNumber(value) {
-      const n = toNumber(value);
-      if (!Number.isFinite(n)) return value || "-";
-      return n % 1 === 0 ? n.toLocaleString("th-TH") : n.toFixed(2);
-    }
-
-    function getSheet(data, name) {
-      return data?.data?.[name] || [];
-    }
-
-    async function loadDashboard() {
-      try {
-        const response = await fetch(API_URL);
-        if (!response.ok) throw new Error("โหลดข้อมูลไม่สำเร็จ: " + response.status);
-        const json = await response.json();
-        if (!json.success) throw new Error(json.message || "API ส่งข้อมูลไม่สำเร็จ");
-
+    async function loadDashboard(){
+      try{
+        const response = await fetch(API_URL); if(!response.ok) throw new Error("โหลดข้อมูลไม่สำเร็จ: " + response.status);
+        const json = await response.json(); if(!json.success) throw new Error(json.message || "API ส่งข้อมูลไม่สำเร็จ");
         document.getElementById("status").style.display = "none";
         document.getElementById("updatedAt").textContent = "อัปเดตล่าสุด: " + new Date(json.updated_at || Date.now()).toLocaleString("th-TH");
-
-        renderKpis(getSheet(json, "DASHBOARD_KPI"));
-        renderGroupChart(getSheet(json, "SUMMARY_BY_GROUP"));
-        renderCourseChart(getSheet(json, "SUMMARY_BY_COURSE"));
-        renderBeforeAfterChart(getSheet(json, "SUMMARY_BY_GROUP"));
-        renderSkillGapChart(getSheet(json, "SUMMARY_SKILL_GAP"));
-        renderInsights(getSheet(json, "EXECUTIVE_INSIGHTS"));
-        renderUnitTable(getSheet(json, "SUMMARY_BY_UNIT"));
-      } catch (error) {
+        const kpis = getSheet(json,"DASHBOARD_KPI");
+        const courseMaster = getSheet(json,"COURSE_MASTER");
+        const courses = getSheet(json,"SUMMARY_BY_COURSE");
+        const units = getSheet(json,"SUMMARY_BY_UNIT");
+        const rawSkillGaps = getSheet(json,"SUMMARY_SKILL_GAP");
+        const skillGaps = hasUsableSkillGaps(rawSkillGaps) ? rawSkillGaps : normalizeRows(FALLBACK_SKILL_GAPS);
+        const roadmap = getSheet(json,"STRATEGIC_ROADMAP").length ? getSheet(json,"STRATEGIC_ROADMAP") : normalizeRows(FALLBACK_ROADMAP);
+        const insights = getSheet(json,"EXECUTIVE_INSIGHTS");
+        renderCourseKpis(kpis,courseMaster,courses,skillGaps);
+        renderCourseStatusChart(kpis,courseMaster,courses);
+        renderCourseChart(courses);
+        renderLearnerAddedCourses(skillGaps);
+        renderUnitAccordion(units);
+        renderSkillGapChart(skillGaps);
+        renderSkillGapTable(skillGaps);
+        renderRoadmap(roadmap);
+        renderInsights(insights);
+      }catch(error){
         document.getElementById("status").className = "error";
-        document.getElementById("status").innerHTML = `<strong>ไม่สามารถโหลดข้อมูลได้</strong><br>${error.message}<br>โปรดตรวจสอบว่า Apps Script Deploy เป็น Web App และตั้งค่า Who has access: Anyone แล้ว`;
+        document.getElementById("status").innerHTML = `<strong>ไม่สามารถโหลดข้อมูลได้</strong><br>${error.message}<br>ตรวจสอบว่า Apps Script Deploy เป็น Web App และตั้งค่า Who has access: Anyone แล้ว`;
       }
     }
 
-    function renderKpis(rows) {
-      const kpiGrid = document.getElementById("kpiGrid");
-      kpiGrid.innerHTML = "";
-
-      const preferred = ["Total Learners", "Total Records", "Total Courses", "Avg Learning Gain", "Avg Before Level", "Avg After Level", "Top Course", "Strategic Gap"];
-      const sorted = [...rows].sort((a, b) => {
-        const an = pick(a, ["metric_name", "Metric Name"]);
-        const bn = pick(b, ["metric_name", "Metric Name"]);
-        const ai = preferred.indexOf(an);
-        const bi = preferred.indexOf(bn);
-        return (ai === -1 ? 99 : ai) - (bi === -1 ? 99 : bi);
-      }).slice(0, 8);
-
-      const gainRow = rows.find(r => String(pick(r, ["metric_name", "Metric Name"])).toLowerCase().includes("gain"));
-      if (gainRow) document.getElementById("heroGain").textContent = "+" + formatNumber(pick(gainRow, ["metric_value", "Metric Value"])) + " ระดับ";
-
-      sorted.forEach(row => {
-        const name = pick(row, ["metric_name", "Metric Name"], "KPI");
-        const value = pick(row, ["metric_value", "Metric Value"], "-");
-        const unit = pick(row, ["metric_unit", "Metric Unit"], "");
-        const desc = pick(row, ["description", "Description"], "");
-
-        const card = document.createElement("div");
-        card.className = "card kpi-card";
-        card.innerHTML = `
-          <div>
-            <div class="kpi-name">${name}</div>
-            <div class="kpi-value">${formatNumber(value)} <span class="kpi-unit">${unit}</span></div>
-          </div>
-          <div class="kpi-desc">${desc}</div>
-        `;
-        kpiGrid.appendChild(card);
-      });
+    function getCourseStats(kpis,courseMaster,courses){
+      const totalPrepared = courseMaster.length || toNumber(metricValue(kpis,["Total Courses","Total Prepared Courses"],46));
+      const selectedCourses = courses.filter(r => toNumber(pick(r,["learner_count","Learner Count","count"])) > 0).length;
+      const unselectedCourses = Math.max(totalPrepared - selectedCourses,0);
+      const top = [...courses].sort((a,b) => toNumber(pick(b,["learner_count","Learner Count","count"])) - toNumber(pick(a,["learner_count","Learner Count","count"]))).find(r => toNumber(pick(r,["learner_count","Learner Count","count"])) > 0) || {};
+      return {totalPrepared,selectedCourses,unselectedCourses,topCourse:pick(top,["course_title","Course Title","title"],metricValue(kpis,["Top Course"],"-")),topCount:toNumber(pick(top,["learner_count","Learner Count","count"],0))}
     }
 
-    function makeChart(id, config) {
-      if (chartRefs[id]) chartRefs[id].destroy();
-      chartRefs[id] = new Chart(document.getElementById(id), config);
+    function renderCourseKpis(kpis,courseMaster,courses,skillGaps){
+      const stats = getCourseStats(kpis,courseMaster,courses); const totalRecords = metricValue(kpis,["Total Records","Total Learning Records","Total Learners/Responses"],277);
+      const topGap = [...skillGaps].sort((a,b) => toNumber(pick(b,["mention_count","Mention Count","count"])) - toNumber(pick(a,["mention_count","Mention Count","count"]))).find(Boolean) || {};
+      const gapName = pick(topGap,["gap_category","Gap Category"],"-"); const gapCount = pick(topGap,["mention_count","Mention Count"],0);
+      document.getElementById("mockTotalCourses").textContent = formatNumber(stats.totalPrepared); document.getElementById("mockSelectedCourses").textContent = formatNumber(stats.selectedCourses); document.getElementById("mockTopCourseCount").textContent = formatNumber(stats.topCount); document.getElementById("mockTopGap").textContent = formatNumber(gapCount);
+      const cards = [
+        {name:"Total Prepared Courses",value:stats.totalPrepared,unit:"คอร์ส",desc:"จำนวนคอร์สทั้งหมดที่เตรียมไว้ในฐานข้อมูล"},
+        {name:"Courses Selected",value:stats.selectedCourses,unit:"คอร์ส",desc:"จำนวนคอร์สที่มีผู้เรียนเลือกเรียนจริง"},
+        {name:"Courses Not Selected",value:stats.unselectedCourses,unit:"คอร์ส",desc:"คอร์สที่ยังไม่ถูกเลือกเรียน ใช้พิจารณาปรับประชาสัมพันธ์หรือทบทวนความเหมาะสม"},
+        {name:"Most Popular Course",value:stats.topCourse || "-",unit:stats.topCount ? `${formatNumber(stats.topCount)} คน` : "",desc:"คอร์สที่ได้รับความนิยมสูงสุด"},
+        {name:"Total Learning Records",value:totalRecords,unit:"รายการ",desc:"จำนวนผลสะท้อนการเรียนรู้ทั้งหมด"},
+        {name:"Top Skill Gap",value:gapName,unit:gapCount ? `${formatNumber(gapCount)} mentions` : "",desc:"ช่องว่างด้านทักษะที่ควรเร่งต่อยอด"}
+      ];
+      document.getElementById("heroTopCourse").textContent = stats.topCourse || "-"; document.getElementById("heroTopCourseDesc").textContent = stats.topCount ? `มีผู้เลือกเรียน ${formatNumber(stats.topCount)} คน/รายการ` : "คอร์สที่ได้รับความนิยมสูงสุด";
+      const grid = document.getElementById("kpiGrid"); grid.innerHTML = ""; cards.forEach(card => {const el = document.createElement("div"); el.className = "kpi-card"; el.innerHTML = `<div><div class="kpi-name">${card.name}</div><div class="kpi-value">${formatNumber(card.value)} <span class="kpi-unit">${card.unit}</span></div></div><div class="kpi-desc">${card.desc}</div>`; grid.appendChild(el)})
     }
 
-    function renderGroupChart(rows) {
-      const labels = rows.map(r => pick(r, ["learner_group", "Learner Group"]));
-      const values = rows.map(r => toNumber(pick(r, ["learner_count", "Learner Count"])));
+    function makeChart(id,config){if(chartRefs[id]) chartRefs[id].destroy(); chartRefs[id] = new Chart(document.getElementById(id),config)}
+    function renderCourseStatusChart(kpis,courseMaster,courses){const stats = getCourseStats(kpis,courseMaster,courses); makeChart("courseStatusChart",{type:"doughnut",data:{labels:["คอร์สที่ถูกเลือกเรียน","คอร์สที่ยังไม่ถูกเลือก"],datasets:[{data:[stats.selectedCourses,stats.unselectedCourses]}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:"bottom"}}}}); document.getElementById("courseStatusMini").innerHTML = `<div class="mini-item"><div class="n">${formatNumber(stats.totalPrepared)}</div><div class="t">คอร์สที่เตรียมไว้ทั้งหมด</div></div><div class="mini-item"><div class="n">${formatNumber(stats.selectedCourses)}</div><div class="t">คอร์สที่ถูกเลือกเรียน</div></div><div class="mini-item"><div class="n">${formatNumber(stats.unselectedCourses)}</div><div class="t">คอร์สที่ยังไม่ถูกเลือก</div></div>`}
+    function renderCourseChart(rows){const topRows = [...rows].sort((a,b) => toNumber(pick(b,["learner_count","Learner Count","count"])) - toNumber(pick(a,["learner_count","Learner Count","count"]))).filter(r => toNumber(pick(r,["learner_count","Learner Count","count"])) > 0).slice(0,10).reverse(); makeChart("courseChart",{type:"bar",data:{labels:topRows.map(r => String(pick(r,["course_title","Course Title","title"],"-")).slice(0,42)),datasets:[{label:"จำนวนผู้เรียน",data:topRows.map(r => toNumber(pick(r,["learner_count","Learner Count","count"])))}]},options:{indexAxis:"y",responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{x:{beginAtZero:true}}}})}
+    function renderLearnerAddedCourses(skillGaps){const tbody = document.getElementById("learnerAddedTable"); tbody.innerHTML = ""; const sorted = [...skillGaps].sort((a,b) => toNumber(pick(b,["mention_count","Mention Count","count"])) - toNumber(pick(a,["mention_count","Mention Count","count"]))).slice(0,8); sorted.forEach(row => {const tr = document.createElement("tr"); tr.innerHTML = `<td><strong>${pick(row,["gap_category","Gap Category"],"-")}</strong></td><td class="priority">${formatNumber(pick(row,["mention_count","Mention Count","count"],"-"))}</td><td>${pick(row,["strategic_priority","Strategic Priority"],"-")}</td><td>${pick(row,["executive_note","Executive Note","recommended_action","Recommended Action"],"-")}</td>`; tbody.appendChild(tr)}); const topName = pick(sorted[0],["gap_category","Gap Category"],"Advanced AI & Automation"); document.getElementById("learnerAddedInsight").textContent = `หัวข้อที่สะท้อนความต้องการสูงสุดคือ “${topName}” แปลว่าผู้เรียนเริ่มต้องการต่อยอดจากการใช้เครื่องมือพื้นฐาน ไปสู่การสร้างระบบ งานอัตโนมัติ Dashboard และการใช้ AI เฉพาะทางตามภารกิจของหน่วยงาน`}
 
-      makeChart("groupChart", {
-        type: "doughnut",
-        data: { labels, datasets: [{ data: values }] },
-        options: {
-          responsive: true,
-          maintainAspectRatio: false,
-          plugins: { legend: { position: "bottom" } }
-        }
-      });
-    }
+    function renderUnitAccordion(rows){const container = document.getElementById("unitAccordion"); container.innerHTML = ""; const sorted = [...rows].sort((a,b) => toNumber(pick(b,["learner_count","Learner Count","count"])) - toNumber(pick(a,["learner_count","Learner Count","count"]))).slice(0,24); sorted.forEach(row => {const department = pick(row,["department","Department","faculty_or_office","Faculty Or Office"],"-"); const learnerCount = pick(row,["learner_count","Learner Count","count"],"-"); const topCourses = pick(row,["top_courses","Top Courses"],"-"); const keyLearning = pick(row,["key_learning","Key Learning"],"ยังไม่มีข้อมูลสิ่งที่เรียนรู้ใน SUMMARY_BY_UNIT"); const keyApplication = pick(row,["key_application","Key Application","application"],"ยังไม่มีข้อมูลการนำไปใช้ใน SUMMARY_BY_UNIT"); const outcomes = pick(row,["observed_outcomes","Observed Outcomes","outcomes"],"ยังไม่มีข้อมูลผลลัพธ์ที่เกิดขึ้น"); const skillGap = pick(row,["skill_gap","Skill Gap","future_need_category"],"ยังไม่มีข้อมูลช่องว่างด้านทักษะ"); const futureNeed = pick(row,["future_need","Future Need","future_needs"],"ยังไม่มีข้อมูลสิ่งที่ต้องการเรียนต่อ"); const fitAnalysis = pick(row,["fit_analysis","Fit Analysis","suitability_analysis","course_job_fit"],"ควรวิเคราะห์เพิ่มว่าเนื้อหาที่เลือกเรียนสอดคล้องกับภารกิจของหน่วยงานในระดับใด และควรต่อยอดเป็นหลักสูตรเฉพาะทางหรือไม่"); const recommendedProgram = pick(row,["recommended_program","Recommended Program","recommended_action"],"ควรออกแบบ Learning Path เฉพาะภารกิจของหน่วยงาน"); const executiveInsight = pick(row,["executive_insight","Executive Insight"],"ควรใช้ข้อมูลนี้ประกอบการวางแผนพัฒนาทักษะเชิงหน่วยงาน"); const item = document.createElement("div"); item.className = "accordion-item"; item.innerHTML = `<button class="accordion-header" onclick="toggleAccordion(this)"><div><div class="accordion-title">${department}</div><div class="accordion-meta"><span class="meta-pill">ผู้เรียน ${formatNumber(learnerCount)} คน/รายการ</span></div></div><div class="accordion-icon">+</div></button><div class="accordion-body"><div class="detail-grid"><div class="detail-card"><h4>คอร์สเด่นที่เลือกเรียน</h4><p>${topCourses}</p></div><div class="detail-card"><h4>สิ่งที่เรียนรู้</h4><p>${keyLearning}</p></div><div class="detail-card"><h4>การนำไปใช้ในงาน</h4><p>${keyApplication}</p></div><div class="detail-card"><h4>ผลลัพธ์ที่เกิดขึ้น</h4><p>${outcomes}</p></div><div class="detail-card"><h4>ความเหมาะสมกับภารกิจ</h4><p>${fitAnalysis}</p></div><div class="detail-card"><h4>ช่องว่างด้านทักษะ</h4><p>${skillGap}</p></div><div class="detail-card"><h4>สิ่งที่ต้องการเรียนต่อ</h4><p>${futureNeed}</p></div><div class="detail-card"><h4>ข้อเสนอแนะ/หลักสูตรที่ควรต่อยอด</h4><p>${recommendedProgram}</p></div><div class="detail-card" style="grid-column:1 / -1"><h4>Insight สำหรับผู้บริหาร</h4><p>${executiveInsight}</p></div></div></div>`; container.appendChild(item)})}
+    function toggleAccordion(button){button.closest(".accordion-item").classList.toggle("active")}
 
-    function renderCourseChart(rows) {
-      const topRows = [...rows]
-        .sort((a,b) => toNumber(pick(b, ["learner_count", "Learner Count"])) - toNumber(pick(a, ["learner_count", "Learner Count"])))
-        .slice(0, 8)
-        .reverse();
-
-      makeChart("courseChart", {
-        type: "bar",
-        data: {
-          labels: topRows.map(r => pick(r, ["course_title", "Course Title"]).slice(0, 34)),
-          datasets: [{ label: "จำนวนผู้เรียน", data: topRows.map(r => toNumber(pick(r, ["learner_count", "Learner Count"]))) }]
-        },
-        options: {
-          indexAxis: "y",
-          responsive: true,
-          maintainAspectRatio: false,
-          plugins: { legend: { display: false } },
-          scales: { x: { beginAtZero: true } }
-        }
-      });
-    }
-
-    function renderBeforeAfterChart(rows) {
-      const labels = rows.map(r => pick(r, ["learner_group", "Learner Group"]));
-      const before = rows.map(r => toNumber(pick(r, ["avg_before", "Avg Before"])));
-      const after = rows.map(r => toNumber(pick(r, ["avg_after", "Avg After"])));
-
-      makeChart("beforeAfterChart", {
-        type: "bar",
-        data: {
-          labels,
-          datasets: [
-            { label: "ก่อนเรียน", data: before },
-            { label: "หลังเรียน", data: after }
-          ]
-        },
-        options: {
-          responsive: true,
-          maintainAspectRatio: false,
-          scales: { y: { beginAtZero: true, suggestedMax: 5 } }
-        }
-      });
-    }
-
-    function renderSkillGapChart(rows) {
-      const sorted = [...rows]
-        .sort((a,b) => toNumber(pick(b, ["mention_count", "Mention Count"])) - toNumber(pick(a, ["mention_count", "Mention Count"])))
-        .slice(0, 7)
-        .reverse();
-
-      makeChart("skillGapChart", {
-        type: "bar",
-        data: {
-          labels: sorted.map(r => pick(r, ["gap_category", "Gap Category"]).slice(0, 34)),
-          datasets: [{ label: "จำนวนการกล่าวถึง", data: sorted.map(r => toNumber(pick(r, ["mention_count", "Mention Count"]))) }]
-        },
-        options: {
-          indexAxis: "y",
-          responsive: true,
-          maintainAspectRatio: false,
-          plugins: { legend: { display: false } },
-          scales: { x: { beginAtZero: true } }
-        }
-      });
-    }
-
-    function renderInsights(rows) {
-      const grid = document.getElementById("insightGrid");
-      grid.innerHTML = "";
-      rows.slice(0, 6).forEach(row => {
-        const type = pick(row, ["insight_type", "Insight Type"], "Insight");
-        const title = pick(row, ["insight_title", "Insight Title"], "Executive Insight");
-        const text = pick(row, ["insight_text", "Insight Text"], "");
-        const priority = pick(row, ["priority", "Priority"], "High");
-
-        const card = document.createElement("div");
-        card.className = "card insight-card";
-        card.innerHTML = `
-          <div class="badge">${type} · ${priority}</div>
-          <h3>${title}</h3>
-          <p>${text}</p>
-        `;
-        grid.appendChild(card);
-      });
-    }
-
-    function renderUnitTable(rows) {
-      const tbody = document.getElementById("unitTable");
-      tbody.innerHTML = "";
-      const sorted = [...rows]
-        .sort((a,b) => toNumber(pick(b, ["learner_count", "Learner Count"])) - toNumber(pick(a, ["learner_count", "Learner Count"])))
-        .slice(0, 12);
-
-      sorted.forEach(row => {
-        const department = pick(row, ["department", "Department", "faculty_or_office", "Faculty Or Office"], "-");
-        const count = pick(row, ["learner_count", "Learner Count"], "-");
-        const courses = pick(row, ["top_courses", "Top Courses"], "-");
-        const app = pick(row, ["key_application", "Key Application"], "-");
-        const insight = pick(row, ["executive_insight", "Executive Insight"], "-");
-
-        const tr = document.createElement("tr");
-        tr.innerHTML = `
-          <td><strong>${department}</strong></td>
-          <td class="priority">${formatNumber(count)}</td>
-          <td>${courses}</td>
-          <td>${app}</td>
-          <td>${insight}</td>
-        `;
-        tbody.appendChild(tr);
-      });
-    }
-
+    function renderSkillGapChart(rows){const sorted = [...rows].sort((a,b) => toNumber(pick(b,["mention_count","Mention Count","count"])) - toNumber(pick(a,["mention_count","Mention Count","count"]))).slice(0,8).reverse(); makeChart("skillGapChart",{type:"bar",data:{labels:sorted.map(r => String(pick(r,["gap_category","Gap Category"],"-")).slice(0,38)),datasets:[{label:"จำนวนการกล่าวถึง",data:sorted.map(r => toNumber(pick(r,["mention_count","Mention Count","count"])))}]},options:{indexAxis:"y",responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{x:{beginAtZero:true,ticks:{precision:0}}}}})}
+    function renderSkillGapTable(rows){const tbody = document.getElementById("skillGapTable"); tbody.innerHTML = ""; [...rows].sort((a,b) => toNumber(pick(b,["mention_count","Mention Count","count"])) - toNumber(pick(a,["mention_count","Mention Count","count"]))).forEach(row => {const tr = document.createElement("tr"); tr.innerHTML = `<td><strong>${pick(row,["gap_category","Gap Category"],"-")}</strong></td><td class="priority">${formatNumber(pick(row,["mention_count","Mention Count","count"],"-"))}</td><td>${pick(row,["strategic_priority","Strategic Priority"],"-")}</td><td>${pick(row,["recommended_action","Recommended Action"],"-")}</td>`; tbody.appendChild(tr)})}
+    function renderRoadmap(rows){const container = document.getElementById("roadmapGrid"); container.innerHTML = ""; rows.forEach(row => {const card = document.createElement("div"); card.className = "process-card"; card.innerHTML = `<div class="phase">${pick(row,["phase","Phase"],"-")} · ${pick(row,["period","Period"],"-")}</div><h3>${pick(row,["focus_area","Focus Area"],"-")}</h3><p>${pick(row,["description","Description"],"-")}</p><ul><li><strong>กลุ่มเป้าหมาย:</strong> ${pick(row,["target_group","Target Group"],"-")}</li><li><strong>หลักสูตร/โครงการ:</strong> ${pick(row,["priority_programs","Priority Programs"],"-")}</li><li><strong>KPI:</strong> ${pick(row,["kpi","KPI"],"-")}</li><li><strong>ผลลัพธ์:</strong> ${pick(row,["expected_outcomes","Expected Outcomes"],"-")}</li></ul>`; container.appendChild(card)})}
+    function renderInsights(rows){const grid = document.getElementById("insightGrid"); grid.innerHTML = ""; const defaults = normalizeRows([{insight_type:"Strategic",priority:"High",insight_title:"คอร์สที่ถูกเลือกเรียนสะท้อนความต้องการใช้งานจริง",insight_text:"หากคอร์สที่มีผู้เลือกเรียนสูงอยู่ในกลุ่ม Office, Data และ AI Tools แสดงว่าองค์กรยังต้องการฐานทักษะดิจิทัลควบคู่กับการต่อยอด AI"},{insight_type:"Opportunity",priority:"Very High",insight_title:"Skill Gap กำลังขยับจากการใช้เครื่องมือไปสู่การสร้างระบบ",insight_text:"ความต้องการด้าน AI Agent, Automation และ Dashboard สะท้อนโอกาสในการต่อยอดสู่ Smart Office และระบบช่วยตัดสินใจ"},{insight_type:"Policy",priority:"High",insight_title:"ควรออกแบบ Learning Path รายหน่วยงาน",insight_text:"ข้อมูลรายหน่วยงานควรใช้วิเคราะห์ความเหมาะสมระหว่างคอร์สที่เรียนกับภารกิจจริง เพื่อออกแบบหลักสูตรเฉพาะทางและวัดผลลัพธ์เชิงงาน"}]); const source = rows.length ? rows : defaults; source.slice(0,6).forEach(row => {const card = document.createElement("div"); card.className = "card insight-card"; card.innerHTML = `<div class="badge">${pick(row,["insight_type","Insight Type"],"Insight")} · ${pick(row,["priority","Priority"],"High")}</div><h3>${pick(row,["insight_title","Insight Title"],"Executive Insight")}</h3><p>${pick(row,["insight_text","Insight Text"],"")}</p>`; grid.appendChild(card)})}
     loadDashboard();
   </script>
 </body>
