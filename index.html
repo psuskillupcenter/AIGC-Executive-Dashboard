@@ -225,7 +225,117 @@
     function renderCourseChart(rows){const topRows = [...rows].sort((a,b) => toNumber(pick(b,["learner_count","Learner Count","count"])) - toNumber(pick(a,["learner_count","Learner Count","count"]))).filter(r => toNumber(pick(r,["learner_count","Learner Count","count"])) > 0).slice(0,10).reverse(); makeChart("courseChart",{type:"bar",data:{labels:topRows.map(r => String(pick(r,["course_title","Course Title","title"],"-")).slice(0,42)),datasets:[{label:"จำนวนผู้เรียน",data:topRows.map(r => toNumber(pick(r,["learner_count","Learner Count","count"])))}]},options:{indexAxis:"y",responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{x:{beginAtZero:true}}}})}
     function renderLearnerAddedCourses(skillGaps){const tbody = document.getElementById("learnerAddedTable"); tbody.innerHTML = ""; const sorted = [...skillGaps].sort((a,b) => toNumber(pick(b,["mention_count","Mention Count","count"])) - toNumber(pick(a,["mention_count","Mention Count","count"]))).slice(0,8); sorted.forEach(row => {const tr = document.createElement("tr"); tr.innerHTML = `<td><strong>${pick(row,["gap_category","Gap Category"],"-")}</strong></td><td class="priority">${formatNumber(pick(row,["mention_count","Mention Count","count"],"-"))}</td><td>${pick(row,["strategic_priority","Strategic Priority"],"-")}</td><td>${pick(row,["executive_note","Executive Note","recommended_action","Recommended Action"],"-")}</td>`; tbody.appendChild(tr)}); const topName = pick(sorted[0],["gap_category","Gap Category"],"Advanced AI & Automation"); document.getElementById("learnerAddedInsight").textContent = `หัวข้อที่สะท้อนความต้องการสูงสุดคือ “${topName}” แปลว่าผู้เรียนเริ่มต้องการต่อยอดจากการใช้เครื่องมือพื้นฐาน ไปสู่การสร้างระบบ งานอัตโนมัติ Dashboard และการใช้ AI เฉพาะทางตามภารกิจของหน่วยงาน`}
 
-    function renderUnitAccordion(rows){const container = document.getElementById("unitAccordion"); container.innerHTML = ""; const sorted = [...rows].sort((a,b) => toNumber(pick(b,["learner_count","Learner Count","count"])) - toNumber(pick(a,["learner_count","Learner Count","count"]))).slice(0,24); sorted.forEach(row => {const department = pick(row,["department","Department","faculty_or_office","Faculty Or Office"],"-"); const learnerCount = pick(row,["learner_count","Learner Count","count"],"-"); const topCourses = pick(row,["top_courses","Top Courses"],"-"); const keyLearning = pick(row,["key_learning","Key Learning"],"ยังไม่มีข้อมูลสิ่งที่เรียนรู้ใน SUMMARY_BY_UNIT"); const keyApplication = pick(row,["key_application","Key Application","application"],"ยังไม่มีข้อมูลการนำไปใช้ใน SUMMARY_BY_UNIT"); const outcomes = pick(row,["observed_outcomes","Observed Outcomes","outcomes"],"ยังไม่มีข้อมูลผลลัพธ์ที่เกิดขึ้น"); const skillGap = pick(row,["skill_gap","Skill Gap","future_need_category"],"ยังไม่มีข้อมูลช่องว่างด้านทักษะ"); const futureNeed = pick(row,["future_need","Future Need","future_needs"],"ยังไม่มีข้อมูลสิ่งที่ต้องการเรียนต่อ"); const fitAnalysis = pick(row,["fit_analysis","Fit Analysis","suitability_analysis","course_job_fit"],"ควรวิเคราะห์เพิ่มว่าเนื้อหาที่เลือกเรียนสอดคล้องกับภารกิจของหน่วยงานในระดับใด และควรต่อยอดเป็นหลักสูตรเฉพาะทางหรือไม่"); const recommendedProgram = pick(row,["recommended_program","Recommended Program","recommended_action"],"ควรออกแบบ Learning Path เฉพาะภารกิจของหน่วยงาน"); const executiveInsight = pick(row,["executive_insight","Executive Insight"],"ควรใช้ข้อมูลนี้ประกอบการวางแผนพัฒนาทักษะเชิงหน่วยงาน"); const item = document.createElement("div"); item.className = "accordion-item"; item.innerHTML = `<button class="accordion-header" onclick="toggleAccordion(this)"><div><div class="accordion-title">${department}</div><div class="accordion-meta"><span class="meta-pill">ผู้เรียน ${formatNumber(learnerCount)} คน/รายการ</span></div></div><div class="accordion-icon">+</div></button><div class="accordion-body"><div class="detail-grid"><div class="detail-card"><h4>คอร์สเด่นที่เลือกเรียน</h4><p>${topCourses}</p></div><div class="detail-card"><h4>สิ่งที่เรียนรู้</h4><p>${keyLearning}</p></div><div class="detail-card"><h4>การนำไปใช้ในงาน</h4><p>${keyApplication}</p></div><div class="detail-card"><h4>ผลลัพธ์ที่เกิดขึ้น</h4><p>${outcomes}</p></div><div class="detail-card"><h4>ความเหมาะสมกับภารกิจ</h4><p>${fitAnalysis}</p></div><div class="detail-card"><h4>ช่องว่างด้านทักษะ</h4><p>${skillGap}</p></div><div class="detail-card"><h4>สิ่งที่ต้องการเรียนต่อ</h4><p>${futureNeed}</p></div><div class="detail-card"><h4>ข้อเสนอแนะ/หลักสูตรที่ควรต่อยอด</h4><p>${recommendedProgram}</p></div><div class="detail-card" style="grid-column:1 / -1"><h4>Insight สำหรับผู้บริหาร</h4><p>${executiveInsight}</p></div></div></div>`; container.appendChild(item)})}
+    function renderUnitAccordion(rows){
+      const container = byId("unitAccordion") || byId("unitTable") || byId("unitCards");
+      if(!container) return;
+
+      container.innerHTML = "";
+      const sorted = [...rows]
+        .sort((a,b) => toNumber(pick(b,["learner_count","Learner Count","count"])) - toNumber(pick(a,["learner_count","Learner Count","count"])))
+        .slice(0,24);
+
+      if(!sorted.length){
+        container.innerHTML = `<div class="card">ยังไม่มีข้อมูลรายหน่วยงานใน SUMMARY_BY_UNIT</div>`;
+        return;
+      }
+
+      sorted.forEach(row => {
+        const department = pick(row,["department","Department","faculty_or_office","Faculty Or Office"],"-");
+        const faculty = pick(row,["faculty_or_office","Faculty Or Office"],"");
+        const learnerGroup = pick(row,["learner_group","Learner Group"],"");
+        const learnerCount = pick(row,["learner_count","Learner Count","count"],"-");
+        const avgBefore = pick(row,["avg_before","Avg Before"],"");
+        const avgAfter = pick(row,["avg_after","Avg After"],"");
+        const avgGain = pick(row,["avg_gain","Avg Gain","learning_gain"],"");
+        const topCourses = pick(row,["top_courses","Top Courses"],"-");
+        const impactAreas = pick(row,["impact_areas","Impact Areas","impact_area","Impact Area"],"");
+        const futureNeeds = pick(row,["future_needs","Future Needs","future_need","Future Need"],"");
+        const executiveInsight = pick(row,["executive_insight","Executive Insight"],"");
+
+        const keyLearning = pick(row,["key_learning","Key Learning"], topCourses || "สรุปจากคอร์สเด่นที่หน่วยงานเลือกเรียน");
+        const keyApplication = pick(row,["key_application","Key Application","application"], createApplicationText(impactAreas, topCourses));
+        const outcomes = pick(row,["observed_outcomes","Observed Outcomes","outcomes"], createOutcomeText(impactAreas, avgGain));
+        const skillGap = pick(row,["skill_gap","Skill Gap","future_need_category"], futureNeeds || "ควรเก็บข้อมูลความต้องการพัฒนาต่อเพิ่มเติม");
+        const fitAnalysis = pick(row,["fit_analysis","Fit Analysis","suitability_analysis","course_job_fit"], createFitText(department, topCourses, impactAreas, futureNeeds));
+        const recommendedProgram = pick(row,["recommended_program","Recommended Program","recommended_action"], createProgramText(futureNeeds));
+        const insight = executiveInsight || createInsightText(department, futureNeeds, impactAreas);
+
+        const item = document.createElement("div");
+        item.className = "accordion-item";
+        item.innerHTML = `
+          <button class="accordion-header" onclick="toggleAccordion(this)">
+            <div>
+              <div class="accordion-title">${department}</div>
+              <div class="accordion-meta">
+                ${faculty ? `<span class="meta-pill">${faculty}</span>` : ""}
+                ${learnerGroup ? `<span class="meta-pill">${learnerGroup}</span>` : ""}
+                <span class="meta-pill">ผู้เรียน ${formatNumber(learnerCount)} คน/รายการ</span>
+                ${avgGain !== "" ? `<span class="meta-pill">Gain ${formatNumber(avgGain)}</span>` : ""}
+              </div>
+            </div>
+            <div class="accordion-icon">+</div>
+          </button>
+          <div class="accordion-body">
+            <div class="detail-grid">
+              <div class="detail-card"><h4>คอร์สเด่นที่เลือกเรียน</h4><p>${topCourses}</p></div>
+              <div class="detail-card"><h4>ระดับทักษะก่อน–หลังเรียน</h4><p>ก่อนเรียน ${avgBefore || "-"} → หลังเรียน ${avgAfter || "-"} ${avgGain !== "" ? `(เพิ่มขึ้น ${formatNumber(avgGain)})` : ""}</p></div>
+              <div class="detail-card"><h4>สิ่งที่เรียนรู้</h4><p>${keyLearning}</p></div>
+              <div class="detail-card"><h4>การนำไปใช้ในงาน</h4><p>${keyApplication}</p></div>
+              <div class="detail-card"><h4>ผลลัพธ์ที่เกิดขึ้น</h4><p>${outcomes}</p></div>
+              <div class="detail-card"><h4>ความเหมาะสมกับภารกิจ</h4><p>${fitAnalysis}</p></div>
+              <div class="detail-card"><h4>ช่องว่างด้านทักษะ / Future Needs</h4><p>${skillGap}</p></div>
+              <div class="detail-card"><h4>ข้อเสนอแนะ/หลักสูตรที่ควรต่อยอด</h4><p>${recommendedProgram}</p></div>
+              <div class="detail-card" style="grid-column:1 / -1"><h4>Insight สำหรับผู้บริหาร</h4><p>${insight}</p></div>
+            </div>
+          </div>`;
+        container.appendChild(item);
+      });
+    }
+
+    function createApplicationText(impactAreas, topCourses){
+      const impact = String(impactAreas || "");
+      const courses = String(topCourses || "");
+      if(impact.includes("Data-Driven") || courses.toLowerCase().includes("power bi")) return "นำไปใช้ด้านการจัดทำรายงาน วิเคราะห์ข้อมูล และพัฒนา Dashboard เพื่อสนับสนุนการตัดสินใจ";
+      if(impact.includes("Productivity") || impact.includes("Work Improvement")) return "นำไปใช้ลดขั้นตอนงานประจำ สรุปเอกสาร ร่างเนื้อหา และปรับปรุงกระบวนการทำงานให้รวดเร็วขึ้น";
+      if(impact.includes("Communication") || impact.includes("Content")) return "นำไปใช้ด้านการสื่อสาร การผลิตสื่อ การนำเสนอข้อมูล และการออกแบบเนื้อหาให้เข้าใจง่ายขึ้น";
+      if(impact.includes("Service Innovation")) return "นำไปใช้ยกระดับบริการและออกแบบแนวทางบริการใหม่ที่ตอบโจทย์ผู้รับบริการมากขึ้น";
+      return "นำความรู้จากคอร์สที่เลือกเรียนไปปรับใช้กับงานประจำและการพัฒนางานของหน่วยงาน";
+    }
+
+    function createOutcomeText(impactAreas, avgGain){
+      const gainText = avgGain !== "" ? ` โดยมี Learning Gain เฉลี่ย ${formatNumber(avgGain)}` : "";
+      const impact = String(impactAreas || "");
+      if(impact.includes("Data-Driven")) return `เกิดศักยภาพในการใช้ข้อมูลประกอบการตัดสินใจ และต่อยอดเป็น Dashboard เชิงบริหาร${gainText}`;
+      if(impact.includes("Productivity") || impact.includes("Work Improvement")) return `เพิ่มประสิทธิภาพการทำงาน ลดเวลางานซ้ำซ้อน และช่วยให้บุคลากรโฟกัสงานเชิงคุณค่ามากขึ้น${gainText}`;
+      if(impact.includes("Communication")) return `เพิ่มคุณภาพการสื่อสาร การนำเสนอ และการถ่ายทอดข้อมูลให้ผู้รับบริการเข้าใจง่ายขึ้น${gainText}`;
+      return `เกิดการยกระดับทักษะดิจิทัลและ AI เพื่อนำไปใช้กับงานจริงของหน่วยงาน${gainText}`;
+    }
+
+    function createFitText(department, topCourses, impactAreas, futureNeeds){
+      const courses = String(topCourses || "").toLowerCase();
+      const impact = String(impactAreas || "");
+      if(courses.includes("power bi") || impact.includes("Data-Driven")) return "เหมาะสมสูง เพราะคอร์สที่เลือกเรียนเชื่อมโยงกับการใช้ข้อมูลเพื่อวิเคราะห์ รายงาน และสนับสนุนการตัดสินใจของหน่วยงาน";
+      if(courses.includes("copilot") || courses.includes("notebooklm") || courses.includes("ai")) return "เหมาะสมมาก เพราะคอร์สที่เลือกเรียนช่วยลดภาระงานเอกสาร สรุปข้อมูล และเพิ่มประสิทธิภาพงานประจำของหน่วยงาน";
+      if(courses.includes("word") || courses.includes("excel")) return "เหมาะสมในระดับฐานราก เพราะเป็นทักษะดิจิทัลพื้นฐานที่จำเป็นต่อการทำงานเอกสาร ข้อมูล และการรายงานผล";
+      return "มีความเหมาะสมกับการพัฒนาทักษะพื้นฐานของหน่วยงาน และควรต่อยอดเป็นหลักสูตรเฉพาะทางตามภารกิจจริง";
+    }
+
+    function createProgramText(futureNeeds){
+      const text = String(futureNeeds || "").toLowerCase();
+      const programs = [];
+      if(text.includes("ai") || text.includes("automation") || text.includes("agent")) programs.push("AI Agent / Workflow Automation");
+      if(text.includes("data") || text.includes("visualization") || text.includes("dashboard") || text.includes("power bi")) programs.push("Dashboard Lab / Advanced Power BI");
+      if(text.includes("creative") || text.includes("content") || text.includes("canva")) programs.push("Creative Content & Infographic Design");
+      if(text.includes("security") || text.includes("governance") || text.includes("pdpa")) programs.push("PDPA / Cybersecurity / Data Governance");
+      if(text.includes("language") || text.includes("english")) programs.push("English for Professional Services");
+      return programs.length ? programs.join(" / ") : "Learning Path เฉพาะภารกิจของหน่วยงาน";
+    }
+
+    function createInsightText(department, futureNeeds, impactAreas){
+      const program = createProgramText(futureNeeds);
+      return `หน่วยงาน ${department} มีโอกาสต่อยอดจากผลการเรียนรู้ไปสู่การพัฒนางานจริง โดยควรเน้น ${program} เพื่อให้เกิดผลลัพธ์เชิงระบบและสนับสนุนเป้าหมาย Smart Office`;
+    }
+
     function toggleAccordion(button){button.closest(".accordion-item").classList.toggle("active")}
 
     function renderSkillGapChart(rows){const sorted = [...rows].sort((a,b) => toNumber(pick(b,["mention_count","Mention Count","count"])) - toNumber(pick(a,["mention_count","Mention Count","count"]))).slice(0,8).reverse(); makeChart("skillGapChart",{type:"bar",data:{labels:sorted.map(r => String(pick(r,["gap_category","Gap Category"],"-")).slice(0,38)),datasets:[{label:"จำนวนการกล่าวถึง",data:sorted.map(r => toNumber(pick(r,["mention_count","Mention Count","count"])))}]},options:{indexAxis:"y",responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{x:{beginAtZero:true,ticks:{precision:0}}}}})}
