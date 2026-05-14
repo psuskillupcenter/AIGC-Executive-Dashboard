@@ -157,7 +157,6 @@
       try{
         const response = await fetch(API_URL); if(!response.ok) throw new Error("โหลดข้อมูลไม่สำเร็จ: " + response.status);
         const json = await response.json(); if(!json.success) throw new Error(json.message || "API ส่งข้อมูลไม่สำเร็จ");
-        document.getElementById("status").style.display = "none";
         document.getElementById("updatedAt").textContent = "อัปเดตล่าสุด: " + new Date(json.updated_at || Date.now()).toLocaleString("th-TH");
         const kpis = getSheet(json,"DASHBOARD_KPI");
         const courseMaster = getSheet(json,"COURSE_MASTER");
@@ -176,7 +175,9 @@
         renderSkillGapTable(skillGaps);
         renderRoadmap(roadmap);
         renderInsights(insights);
+        document.getElementById("status").style.display = "none";
       }catch(error){
+        document.getElementById("status").style.display = "block";
         document.getElementById("status").className = "error";
         document.getElementById("status").innerHTML = `<strong>ไม่สามารถโหลดข้อมูลได้</strong><br>${error.message}<br>ตรวจสอบว่า Apps Script Deploy เป็น Web App และตั้งค่า Who has access: Anyone แล้ว`;
       }
@@ -207,7 +208,16 @@
       const grid = document.getElementById("kpiGrid"); grid.innerHTML = ""; cards.forEach(card => {const el = document.createElement("div"); el.className = "kpi-card"; el.innerHTML = `<div><div class="kpi-name">${card.name}</div><div class="kpi-value">${formatNumber(card.value)} <span class="kpi-unit">${card.unit}</span></div></div><div class="kpi-desc">${card.desc}</div>`; grid.appendChild(el)})
     }
 
-    function makeChart(id,config){if(chartRefs[id]) chartRefs[id].destroy(); chartRefs[id] = new Chart(document.getElementById(id),config)}
+    function makeChart(id,config){
+      const canvas = document.getElementById(id);
+      if(!canvas) return;
+      if(typeof Chart === "undefined"){
+        console.warn("Chart.js ยังไม่โหลด กราฟจะไม่แสดง แต่ข้อมูลส่วนอื่นจะแสดงต่อได้");
+        return;
+      }
+      if(chartRefs[id]) chartRefs[id].destroy();
+      chartRefs[id] = new Chart(canvas,config);
+    }
     function renderCourseStatusChart(kpis,courseMaster,courses){const stats = getCourseStats(kpis,courseMaster,courses); makeChart("courseStatusChart",{type:"doughnut",data:{labels:["คอร์สที่ถูกเลือกเรียน","คอร์สที่ยังไม่ถูกเลือก"],datasets:[{data:[stats.selectedCourses,stats.unselectedCourses]}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:"bottom"}}}}); document.getElementById("courseStatusMini").innerHTML = `<div class="mini-item"><div class="n">${formatNumber(stats.totalPrepared)}</div><div class="t">คอร์สที่เตรียมไว้ทั้งหมด</div></div><div class="mini-item"><div class="n">${formatNumber(stats.selectedCourses)}</div><div class="t">คอร์สที่ถูกเลือกเรียน</div></div><div class="mini-item"><div class="n">${formatNumber(stats.unselectedCourses)}</div><div class="t">คอร์สที่ยังไม่ถูกเลือก</div></div>`}
     function renderCourseChart(rows){const topRows = [...rows].sort((a,b) => toNumber(pick(b,["learner_count","Learner Count","count"])) - toNumber(pick(a,["learner_count","Learner Count","count"]))).filter(r => toNumber(pick(r,["learner_count","Learner Count","count"])) > 0).slice(0,10).reverse(); makeChart("courseChart",{type:"bar",data:{labels:topRows.map(r => String(pick(r,["course_title","Course Title","title"],"-")).slice(0,42)),datasets:[{label:"จำนวนผู้เรียน",data:topRows.map(r => toNumber(pick(r,["learner_count","Learner Count","count"])))}]},options:{indexAxis:"y",responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{x:{beginAtZero:true}}}})}
     function renderLearnerAddedCourses(skillGaps){const tbody = document.getElementById("learnerAddedTable"); tbody.innerHTML = ""; const sorted = [...skillGaps].sort((a,b) => toNumber(pick(b,["mention_count","Mention Count","count"])) - toNumber(pick(a,["mention_count","Mention Count","count"]))).slice(0,8); sorted.forEach(row => {const tr = document.createElement("tr"); tr.innerHTML = `<td><strong>${pick(row,["gap_category","Gap Category"],"-")}</strong></td><td class="priority">${formatNumber(pick(row,["mention_count","Mention Count","count"],"-"))}</td><td>${pick(row,["strategic_priority","Strategic Priority"],"-")}</td><td>${pick(row,["executive_note","Executive Note","recommended_action","Recommended Action"],"-")}</td>`; tbody.appendChild(tr)}); const topName = pick(sorted[0],["gap_category","Gap Category"],"Advanced AI & Automation"); document.getElementById("learnerAddedInsight").textContent = `หัวข้อที่สะท้อนความต้องการสูงสุดคือ “${topName}” แปลว่าผู้เรียนเริ่มต้องการต่อยอดจากการใช้เครื่องมือพื้นฐาน ไปสู่การสร้างระบบ งานอัตโนมัติ Dashboard และการใช้ AI เฉพาะทางตามภารกิจของหน่วยงาน`}
