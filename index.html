@@ -11,8 +11,6 @@
 
 #course-added .card{max-width:100%}
 #course-added table{min-width:900px}
-#course-added .card h3{font-size:24px}
-
 </style>
 </head>
 <body>
@@ -21,7 +19,31 @@
 <main>
 <section class="section" id="overview"><div class="container"><div id="status" class="loading">กำลังโหลดข้อมูลจาก Google Sheet...</div><div class="grid kpi-grid" id="kpiGrid"></div></div></section>
 <section class="section light" id="courses"><div class="container"><div class="section-title"><div class="small">Course Analytics</div><h2>ภาพรวมคอร์สและความนิยม</h2><p>คอร์สที่เตรียมไว้ คอร์สที่ถูกเลือกเรียน คอร์สที่ยังไม่ถูกเลือก และคอร์สยอดนิยมสูงสุด</p><div class="updated" id="updatedAt"></div></div><div class="grid two"><div class="card"><h3>สถานะการเลือกเรียนของคอร์ส</h3><div class="chart-box"><canvas id="courseStatusChart"></canvas></div><div class="mini-summary" id="courseStatusMini"></div></div><div class="card"><h3>Top Courses by Learner Count</h3><div class="chart-box"><canvas id="courseChart"></canvas></div></div></div></div></section>
-<section class="section" id="course-added"><div class="container"><div class="section-title"><div class="small">REAL-WORK SKILL NEEDS</div><h2>ความต้องการพัฒนาทักษะจากหน้างานจริง</h2><p>สะท้อนทักษะที่ผู้เรียนต้องการต่อยอดจากบริบทการทำงานจริง เพื่อใช้กำหนดทิศทางหลักสูตรและ Learning Path ระยะต่อไป</p></div><div class="grid"><div class="card" style="overflow:auto"><h3>รายการหัวข้อที่ควรต่อยอด</h3><table><thead><tr><th>หัวข้อ/คอร์ส</th><th>จำนวน</th><th>Priority</th><th>ความหมายเชิงบริหาร</th></tr></thead><tbody id="learnerAddedTable"></tbody></table></div></div></div></section>
+<section class="section" id="course-added">
+  <div class="container">
+    <div class="section-title">
+      <div class="small">REAL-WORK SKILL NEEDS</div>
+      <h2>ความต้องการพัฒนาทักษะจากหน้างานจริง</h2>
+      <p>สะท้อนทักษะที่ผู้เรียนต้องการต่อยอดจากบริบทการทำงานจริง เพื่อใช้กำหนดทิศทางหลักสูตรและ Learning Path ระยะต่อไป</p>
+    </div>
+    <div class="grid">
+      <div class="card" style="overflow:auto">
+        <h3>รายการหัวข้อที่ควรต่อยอด</h3>
+        <table>
+          <thead>
+            <tr>
+              <th>หัวข้อ/คอร์ส</th>
+              <th>จำนวน</th>
+              <th>Priority</th>
+              <th>ความหมายเชิงบริหาร</th>
+            </tr>
+          </thead>
+          <tbody id="learnerAddedTable"></tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</section>
 <section class="section light" id="units"><div class="container"><div class="section-title"><div class="small">Unit-Level Insight</div><h2>วิเคราะห์รายหน่วยงาน</h2><p>คลิกเพื่อดูรายละเอียดว่าเลือกเรียนอะไร นำไปใช้อย่างไร เหมาะสมกับภารกิจหรือไม่ และควรเสริมอะไรต่อ</p></div><div id="unitAccordion" class="accordion-list"></div></div></section>
 <section class="section" id="skillgaps"><div class="container"><div class="section-title"><div class="small">Skill Gap & Future Needs</div><h2>ช่องว่างด้านทักษะและความต้องการพัฒนาต่อ</h2><p>กราฟแสดงเฉพาะ Skill Gap ที่ include_in_top = Yes ส่วนตารางแสดงทุกหมวดเพื่อให้ยอดรวมครบ</p></div><div class="grid two"><div class="card"><h3>Top Skill Gaps</h3><div class="chart-box"><canvas id="skillGapChart"></canvas></div><div class="note">ไม่รวม Other / Customized Needs และ No Specific Future Need ในกราฟนี้</div></div><div class="card" style="overflow:auto"><h3>Strategic Gap Details</h3><table><thead><tr><th>หมวดทักษะ</th><th>จำนวน</th><th>Priority</th><th>Top?</th><th>แนวทางดำเนินการ</th></tr></thead><tbody id="skillGapTable"></tbody></table></div></div></div></section>
 <section class="section deep" id="roadmap"><div class="container"><div class="section-title"><div class="small">Long-Term Strategy</div><h2>แผนยุทธศาสตร์การพัฒนาทักษะระยะยาว</h2><p>Digital, AI และ Global Citizenship เพื่อขับเคลื่อนองค์กรสู่ Smart Office และ Smart Knowledge Hub</p></div><div id="roadmapGrid" class="process"></div></div></section>
